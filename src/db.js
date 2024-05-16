@@ -13,12 +13,13 @@ const {
   password: `${DB_PASSWORD}`,
   host: `${DB_HOST}`,
   dialect: 'postgres',
-  dialectOptions: {
+  
+  /*dialectOptions: {
     ssl: {
       require: true, 
       rejectUnauthorized: false 
     }
-  },
+  }, */
   logging: false,
 }); 
 
@@ -40,6 +41,10 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // const  = sequelize.models;
+const { Template, Category } = sequelize.models;
+
+Category.hasMany(Template);
+Template.belongsTo(Category);
 
 
 
