@@ -1,7 +1,7 @@
+const templatesRouter = require("./templatesRoutes");
+
 const router = require("express").Router();
 
-router.use("/", (req,res) =>{
-    console.log("Hola :D");
-})
+router.use("/templates", templatesRouter)
 
 module.exports= router;
