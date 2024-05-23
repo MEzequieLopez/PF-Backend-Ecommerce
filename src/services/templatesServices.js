@@ -48,9 +48,15 @@ const getTemplateId = async (id)=>{
             include: [
                 {
                     model: Technology,
+                    through: {
+                        attributes: [],
+                      }
                 },
                 {
                     model: Category,
+                    through: {
+                        attributes: [],
+                      }
                 }
             ]
 
