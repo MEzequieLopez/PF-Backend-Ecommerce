@@ -41,6 +41,30 @@ const getFilteredTemplates = async ({ technology, category, sortBy, order, page,
 
 }
 
+const getTemplateId = async (id)=>{
+
+    try {
+        const response = await Template.findAll({
+            include: [
+                {
+                    model: Technology,
+                },
+                {
+                    model: Category,
+                }
+            ]
+
+        })
+        const templateId = response.find((template) => template.id.toString() === id.toString())
+        return templateId
+        
+    } catch (error) {
+        return error
+    }
+
+}
+
 module.exports = {
-    getFilteredTemplates
+    getFilteredTemplates,
+    getTemplateId
 }
