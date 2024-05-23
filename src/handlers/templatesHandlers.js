@@ -1,4 +1,4 @@
-const { getFilteredTemplates } = require("../services/templatesServices");
+const { getFilteredTemplates, getTemplateId } = require("../services/templatesServices");
 const data = require("../../Data.json");
 const { Category, Technology, Template } = require("../db");
 
@@ -22,6 +22,24 @@ const getTemplates = async (req, res) => {
         console.error(error);
         return res.json(error);
     }
+}
+
+const getTemplateById = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const response = await getTemplateId(id)
+
+        if(!response || Object.keys(data).length === 0){
+            return res.status(400).send('Not found')
+        } 
+
+        res.status(200).json(response)   
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while fetching the template.');
+    }
+
 }
 
 
@@ -67,5 +85,6 @@ const loadDb = async (req, res) => {
 }
 module.exports = {
     getTemplates,
+    getTemplateById,
     loadDb
 }
