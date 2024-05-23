@@ -14,11 +14,13 @@ const getTemplates = async (req, res) => {
             page,
             pageSize
         });
-
-        res.status(200).json(templates);
+        if (templates.status === 404) {
+            return res.status(templates.status).json(templates.error);
+        }
+        return res.status(templates.status).json(templates.data);
     } catch (error) {
         console.error(error);
-        res.status(500).send('An error occurred while fetching the templates.');
+        return res.json(error);
     }
 }
 
