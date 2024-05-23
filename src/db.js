@@ -41,7 +41,7 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // const  = sequelize.models;
-const { Template, Category, Technology } = sequelize.models;
+const { Template, Category, Technology, User } = sequelize.models;
 
 // Category.hasMany(Template);
 // Template.belongsTo(Category);
