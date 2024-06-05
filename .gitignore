@@ -319,7 +319,7 @@ paket-files/
 
 # FAKE - F# Make
 .fake/
-
+.env
 # CodeRush personal settings
 .cr/personal
 
@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+.env

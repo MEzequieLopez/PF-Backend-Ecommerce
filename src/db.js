@@ -13,12 +13,13 @@ const {
   password: `${DB_PASSWORD}`,
   host: `${DB_HOST}`,
   dialect: 'postgres',
-  dialectOptions: {
+  
+  /*dialectOptions: {
     ssl: {
       require: true, 
       rejectUnauthorized: false 
     }
-  },
+  }, */
   logging: false,
 }); 
 
@@ -40,8 +41,18 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // const  = sequelize.models;
+const { Template, Category, Technology, User } = sequelize.models;
 
+// Category.hasMany(Template);
+// Template.belongsTo(Category);
 
+Template.belongsToMany(Category, { through: 'TemplateCategories' });
+Template.belongsToMany(User, { through: 'userFavorites', as:"Users" });
+Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
+
+Category.belongsToMany(Template, { through: 'TemplateCategories' });
+User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
+Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

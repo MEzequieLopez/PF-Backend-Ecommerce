@@ -1,0 +1,174 @@
+{
+    "templates": [
+        {
+            "name": "Ecommerce Electronics",
+            "description": "A modern and responsive ecommerce template for electronics built with React and Tailwind CSS.",
+            "price": 49.99,
+            "technologies": ["React", "Tailwind CSS"],
+            "categories": ["Ecommerce", "Electronics"]
+        },
+        {
+            "name": "Automobile Showcase",
+            "description": "A sleek automobile showcase website template using Vue and Bootstrap.",
+            "price": 59.99,
+            "technologies": ["Vue", "Bootstrap"],
+            "categories": ["Automobile", "Showcase"]
+        },
+        {
+            "name": "Clothing Store",
+            "description": "A stylish clothing store template designed with Angular and SASS.",
+            "price": 39.99,
+            "technologies": ["Angular", "SASS"],
+            "categories": ["Ecommerce", "Clothing"]
+        },
+        {
+            "name": "News Portal",
+            "description": "A dynamic news portal template created with Next.js and Tailwind CSS.",
+            "price": 69.99,
+            "technologies": ["Next.js", "Tailwind CSS"],
+            "categories": ["News", "Portal"]
+        },
+        {
+            "name": "Tech Blog",
+            "description": "A clean and modern tech blog template using Astro and CSS Modules.",
+            "price": 29.99,
+            "technologies": ["Astro", "CSS Modules"],
+            "categories": ["Blog", "Tech"]
+        },
+        {
+            "name": "Real Estate Listings",
+            "description": "A comprehensive real estate listings template built with Svelte and Bootstrap.",
+            "price": 54.99,
+            "technologies": ["Svelte", "Bootstrap"],
+            "categories": ["Real Estate", "Listings"]
+        },
+        {
+            "name": "Fitness Website",
+            "description": "A high-energy fitness website template created with React and Material UI.",
+            "price": 44.99,
+            "technologies": ["React", "Material UI"],
+            "categories": ["Fitness", "Health"]
+        },
+        {
+            "name": "Restaurant Menu",
+            "description": "A mouth-watering restaurant menu template built using Vue and Tailwind CSS.",
+            "price": 34.99,
+            "technologies": ["Vue", "Tailwind CSS"],
+            "categories": ["Restaurant", "Menu"]
+        },
+        {
+            "name": "Educational Platform",
+            "description": "An educational platform template designed with Nuxt.js and Vuetify.",
+            "price": 64.99,
+            "technologies": ["Nuxt.js", "Vuetify"],
+            "categories": ["Education", "Platform"]
+        },
+        {
+            "name": "Corporate Website",
+            "description": "A professional corporate website template using Angular and Bootstrap.",
+            "price": 49.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Corporate", "Business"]
+        }
+    ],
+    "categories": [
+        {
+            "name": "Ecommerce"
+        },
+        {
+            "name": "Electronics"
+        },
+        {
+            "name": "Automobile"
+        },
+        {
+            "name": "Showcase"
+        },
+        {
+            "name": "Clothing"
+        },
+        {
+            "name": "News"
+        },
+        {
+            "name": "Portal"
+        },
+        {
+            "name": "Blog"
+        },
+        {
+            "name": "Tech"
+        },
+        {
+            "name": "Real Estate"
+        },
+        {
+            "name": "Listings"
+        },
+        {
+            "name": "Fitness"
+        },
+        {
+            "name": "Health"
+        },
+        {
+            "name": "Restaurant"
+        },
+        {
+            "name": "Menu"
+        },
+        {
+            "name": "Education"
+        },
+        {
+            "name": "Platform"
+        },
+        {
+            "name": "Corporate"
+        },
+        {
+            "name": "Business"
+        }
+    ],
+    "technologies": [
+        {
+            "name": "React"
+        },
+        {
+            "name": "Tailwind CSS"
+        },
+        {
+            "name": "Vue"
+        },
+        {
+            "name": "Bootstrap"
+        },
+        {
+            "name": "Angular"
+        },
+        {
+            "name": "SASS"
+        },
+        {
+            "name": "Next.js"
+        },
+        {
+            "name": "Astro"
+        },
+        {
+            "name": "CSS Modules"
+        },
+        {
+            "name": "Svelte"
+        },
+        {
+            "name": "Material UI"
+        },
+        {
+            "name": "Nuxt.js"
+        },
+        {
+            "name": "Vuetify"
+        }
+    ]
+}
