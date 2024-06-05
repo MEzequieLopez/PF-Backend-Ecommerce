@@ -8,11 +8,11 @@ const registerUser = async (req, res) => {
     try {
         const response = await registerService(email, lastname, name, userPassword);
         if (response.error) {
-            return res.status(response.status).json(response.error);
+            return res.status(response.status).send(response.error);
         }
-        return res.status(response.status).json(response.data);
+        return res.status(response.status).send(response.data);
     } catch (error) {
-        return res.json(error);
+        return res.send(error);
     }
 };
 
@@ -24,13 +24,13 @@ const loginUser = async (req, res) => {
 
         const response = await loginService(email, userPassword);
         if (response.error) {
-            return res.status(response.status).json(response.error);
+            return res.status(response.status).send(response.error);
         }
-        return res.status(response.status).json(response.data);
+        return res.status(response.status).send(response.data);
 
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        return res.status(response.status).json(response.error);
+        return res.status(response.status).send(response.error);
     }
 };
 
@@ -39,11 +39,11 @@ const addFavorite = async (req, res) => {
     try {
         const response = await addNewFavorite(templateId, userId);
         if (response.error) {
-            return res.status(response.status).json(response.error);
+            return res.status(response.status).send(response.error);
         }
-        return res.status(response.status).json(response.data);
+        return res.status(response.status).send(response.data);
     } catch (error) {
-        return res.status(response.status).json(response.error);
+        return res.status(response.status).send(response.error);
     }
 };
 
@@ -52,11 +52,11 @@ const getFavorites = async (req, res) => {
     try {
         const response = await getAllFavorites(userId);
         if (response.error) {
-            return res.status(response.status).json(response.error);
+            return res.status(response.status).send(response.error);
         }
-        return res.status(response.status).json(response.data);
+        return res.status(response.status).send(response.data);
     } catch (error) {
-        return res.status(response.status).json(response.error);
+        return res.status(response.status).send(response.error);
     }
 }
 
@@ -65,9 +65,9 @@ const deleteFavorite = async (req, res) => {
 
     try {
         const result = await removeFavorite(templateId, userId);
-        return res.status(result.status).json(result.data);
+        return res.status(result.status).send(result.data);
     } catch (error) {
-        return res.status(500).json({ status: 500, message: 'Internal Server Error', error: error.message });
+        return res.status(500).send(error.message);
     }
 }
 module.exports = {
