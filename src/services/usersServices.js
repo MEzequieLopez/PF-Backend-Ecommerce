@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { User } = require('../db');
+const { User, Template } = require('../db');
 
 
 const registerService = async (email, lastname, name, userPassword) => {
@@ -44,7 +44,6 @@ const loginService = async (email, userPassword) => {
             return { status: 404, data: 'Usuario no encontrado.' };
         }
 
-
         const isMatch = await bcrypt.compare(userPassword, user.password);
 
         if (isMatch) {
@@ -59,7 +58,67 @@ const loginService = async (email, userPassword) => {
     }
 }
 
+const addNewFavorite = async (templateId, userId) => {
+    try {
+        
+        const user =await User.findByPk(userId);
+        const template = await Template.findByPk(templateId);
+        if (user && template) {
+            await user.addFavorite(template);
+            return { status: 200, data: "Favorito añadido." }
+        } else {
+            return { status: 404, error: 'Usuario o Template no encontrado.' };
+        }
+    } catch (error) {
+        console.error(error);
+        return { status: 500, error: error.message };
+    }
+};
+
+const getAllFavorites = async (userId) => {
+    
+    try {
+        const user = await User.findByPk(userId, {
+            include: [{
+                model: Template,
+                as: 'Favorites',  
+                through: {
+                    attributes: []  
+                }
+            }]
+        });
+
+        if (!user) {
+            return{ status: 404, data: 'Usuario no encontrado' };
+        }
+        const favorites = user.Favorites;
+        return { status: 200, data: favorites };
+    } catch (error) {
+        return { status: 500, error: error.message };
+    }
+};
+
+const removeFavorite = async (templateId, userId) => {
+    try {
+        const user = await User.findByPk(userId);
+        const template = await Template.findByPk(templateId);
+
+        if (user && template) {
+            await user.removeFavorite(template); 
+            return { status: 200, data: "Favorito eliminado." };
+        } else {
+            return { status: 404, error: 'Usuario o Template no encontrado.' };
+        }
+    } catch (error) {
+        console.error(error);
+        return { status: 500, error: error.message };
+    }
+};
+
 module.exports = {
     registerService,
-    loginService
+    loginService,
+    addNewFavorite,
+    getAllFavorites,
+    removeFavorite
 }

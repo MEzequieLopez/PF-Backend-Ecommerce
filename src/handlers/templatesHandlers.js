@@ -6,6 +6,7 @@ const getTemplates = async (req, res) => {
     const { technology, category, sortBy, order, page, pageSize } = req.query;
 
     try {
+
         const templates = await getFilteredTemplates({
             technology,
             category,
@@ -14,11 +15,15 @@ const getTemplates = async (req, res) => {
             page,
             pageSize
         });
+
         if (templates.status === 404) {
             return res.status(templates.status).json(templates.error);
         }
+
         return res.status(templates.status).json(templates.data);
+
     } catch (error) {
+        
         console.error(error);
         return res.json(error);
     }
