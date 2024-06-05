@@ -7,7 +7,7 @@ const getFilteredTemplates = async ({ technology, category, sortBy, order, page,
     // Configurar ordenamiento
     const orderArray = [];
     if (sortBy && order) {
-        orderArray.push([sortBy, order.toUpperCase()]);
+        orderArray.push([ sortBy, order.toUpperCase() ]);
     }
 
     // Configurar paginación
@@ -32,11 +32,13 @@ const getFilteredTemplates = async ({ technology, category, sortBy, order, page,
             limit: limit !== null ? limit : undefined,
             offset: offset !== null ? offset : undefined
         });
-
-        return templates;
+        if (!templates.length) {
+            return { error: "No hay plantillas con esa etiqueta", status: 404 }
+        }
+        return { data: templates, status: 200 };
     } catch (error) {
         console.error(error);
-        throw new Error('An error occurred while fetching the templates.');
+        return { error: 'An error occurred while fetching the templates.', status: 500 };
     }
 
 }
