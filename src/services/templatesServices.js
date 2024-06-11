@@ -43,6 +43,24 @@ const getFilteredTemplates = async ({ technology, category, sortBy, order, page,
 
 }
 
+const getAllCategories = async () => {
+    try {
+        const response = await Category.findAll()
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+const getAllTechnologies = async () => {
+    try {
+        const response = await Technology.findAll()
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
 const getTemplateId = async (id)=>{
 
     try {
@@ -68,5 +86,7 @@ const getTemplateId = async (id)=>{
 
 module.exports = {
     getFilteredTemplates,
-    getTemplateId
+    getTemplateId,
+    getAllCategories,
+    getAllTechnologies
 }
