@@ -1,8 +1,8 @@
 const { Category, Technology, Template } = require("../db");
 
 const getFilteredTemplates = async ({ technology, category, sortBy, order, page, pageSize }) => {
-    const technologyFilter = technology ? { name: technology } : {};
-    const categoryFilter = category ? { name: category } : {};
+   const technologyFilter = technology ? { name: technology.split(',') } : {};
+  const categoryFilter = category ? { name: category.split(',') } : {};
 
     // Configurar ordenamiento
     const orderArray = [];
