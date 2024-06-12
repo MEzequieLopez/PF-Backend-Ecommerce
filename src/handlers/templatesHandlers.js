@@ -1,12 +1,10 @@
-const { getFilteredTemplates, getTemplateId } = require("../services/templatesServices");
+const { getFilteredTemplates, getTemplateId, getAllTechnologies, getAllCategories } = require("../services/templatesServices");
 const data = require("../../Data.json");
 const { Category, Technology, Template } = require("../db");
 
 const getTemplates = async (req, res) => {
     const { technology, category, sortBy, order, page, pageSize } = req.query;
-
     try {
-
         const templates = await getFilteredTemplates({
             technology,
             category,
@@ -15,15 +13,11 @@ const getTemplates = async (req, res) => {
             page,
             pageSize
         });
-
         if (templates.status === 404) {
             return res.status(templates.status).json(templates.error);
         }
-
         return res.status(templates.status).json(templates.data);
-
     } catch (error) {
-        
         console.error(error);
         return res.json(error);
     }
@@ -31,23 +25,39 @@ const getTemplates = async (req, res) => {
 
 const getTemplateById = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const response = await getTemplateId(id)
 
-        if(!response || Object.keys(data).length === 0){
-            return res.status(400).send('Not found')
-        } 
+        if (!response || Object.keys(data).length === 0) {
+            return res.status(400).send('No encontrado')
+        }
 
-        res.status(200).json(response)   
+        res.status(200).json(response)
 
     } catch (error) {
         console.error(error);
-        res.status(500).send('An error occurred while fetching the template.');
+        res.status(500).send('Ha ocurrido un error.');
     }
-
 }
 
+const getTechnologies = async (req, res) => {
+    try {
+        const response = await getAllTechnologies();
+        return res.status(200).json(response)
+    } catch (error) {
+        res.status(500).send('Ha ocurrido un error.');
+    }
+}
 
+const getCategories = async (req, res) => {
+    try {
+        const response = await getAllCategories()
+        return res.status(200).json(response)
+
+    } catch (error) {
+        res.status(500).send('Ha ocurrido un error.');
+    }
+}
 // funcion auxiliar par cargar la base de datos
 const loadDb = async (req, res) => {
     try {
@@ -91,5 +101,7 @@ const loadDb = async (req, res) => {
 module.exports = {
     getTemplates,
     getTemplateById,
-    loadDb
+    loadDb,
+    getTechnologies,
+    getCategories
 }

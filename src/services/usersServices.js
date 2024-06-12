@@ -6,27 +6,22 @@ const registerService = async (email, lastname, name, userPassword) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(userPassword, salt);
-
         const existingUser = await User.findOne({
             where: {
                 email: email
             }
         });
-
         if (existingUser) {
             return { error: `El email ${email} ya existe`, status: 400 }
         }
-
         const newUser = await User.create({
             name: name,
             lastname: lastname,
             email: email,
             password: hashedPassword,
         });
-
         const { password, ...userWithoutPassword } = newUser.get();
         return { data: userWithoutPassword, status: 201 }
-
     } catch (error) {
         console.error('Error al crear el usuario:', error);
     }
@@ -60,7 +55,6 @@ const loginService = async (email, userPassword) => {
 
 const addNewFavorite = async (templateId, userId) => {
     try {
-        
         const user =await User.findByPk(userId);
         const template = await Template.findByPk(templateId);
         if (user && template) {
