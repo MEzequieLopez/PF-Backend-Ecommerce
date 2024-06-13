@@ -1,4 +1,4 @@
-const { Category, Technology, Template } = require("../db");
+const { Category, Technology, Template, Review } = require("../db");
 
 const getFilteredTemplates = async ({ technology, category, sortBy, order, page, pageSize }) => {
     const technologyFilter = technology ? { name: technology } : {};
@@ -59,6 +59,9 @@ const getTemplateId = async (id)=>{
                     through: {
                         attributes: [],
                       }
+                },
+                {
+                    model: Review
                 }
             ]
 
@@ -67,7 +70,8 @@ const getTemplateId = async (id)=>{
         return templateId
         
     } catch (error) {
-        return error
+        console.error(error);
+        return { error: 'An error occurred while fetching the template.', status: 500 };
     }
 
 }
