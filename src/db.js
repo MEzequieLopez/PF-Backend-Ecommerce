@@ -47,9 +47,11 @@ const { Template, Category, Technology, User, Review } = sequelize.models;
 // Template.belongsTo(Category);
 
 Template.belongsToMany(Category, { through: 'TemplateCategories' });
-Category.belongsToMany(Template, { through: 'TemplateCategories' });
-
+Template.belongsToMany(User, { through: 'userFavorites', as:"Users" });
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
+
+Category.belongsToMany(Template, { through: 'TemplateCategories' });
+User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 
 Template.belongsTo(Review)
