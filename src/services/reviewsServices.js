@@ -23,7 +23,8 @@ const postReviewServices = async ({content, rating, date, templateId })=> {
 
         }
     } catch (error) {
-        
+        console.error(error);
+        return error
     }
 
 }
