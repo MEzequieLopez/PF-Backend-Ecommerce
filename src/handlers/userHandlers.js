@@ -19,9 +19,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     const { email } = req.body;
     const userPassword = req.body.password;
-
     try {
-
         const response = await loginService(email, userPassword);
         if (response.error) {
             return res.status(response.status).send(response.error);
