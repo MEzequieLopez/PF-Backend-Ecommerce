@@ -41,7 +41,7 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // const  = sequelize.models;
-const { Template, Category, Technology, User } = sequelize.models;
+const { Template, Category, Technology, User, Review } = sequelize.models;
 
 // Category.hasMany(Template);
 // Template.belongsTo(Category);
@@ -53,6 +53,9 @@ Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Category.belongsToMany(Template, { through: 'TemplateCategories' });
 User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
+
+Template.belongsTo(Review)
+Review.hasMany(Template)
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
