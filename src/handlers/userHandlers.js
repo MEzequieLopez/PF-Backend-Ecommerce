@@ -17,31 +17,32 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-    const { email } = req.body;
-    const userPassword = req.body.password;
+    const { email, password: userPassword } = req.body;
     try {
         const response = await loginService(email, userPassword);
         if (response.error) {
-            return res.status(response.status).send(response.error);
+            return res.status(response.status).json({ error: response.error });
         }
-        return res.status(response.status).send(response.data);
-
+        return res.status(response.status).json(response.data);
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        return res.status(response.status).send(response.error);
+        return res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
 
+
 const addFavorite = async (req, res) => {
-    const { templateId, userId } = req.body;
+    const { templateId } = req.body;
+    const userId = req.userId;
     try {
         const response = await addNewFavorite(templateId, userId);
         if (response.error) {
-            return res.status(response.status).send(response.error);
+            return res.status(response.status).json({ error: response.error });
         }
-        return res.status(response.status).send(response.data);
+        return res.status(response.status).json({ data: response.data });
     } catch (error) {
-        return res.status(response.status).send(response.error);
+        console.error('Error al añadir a favoritos:', error);
+        return res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
 

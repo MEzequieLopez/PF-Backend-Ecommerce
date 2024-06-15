@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { User, Template } = require('../db');
+const token = require('../utils/token');
 
 
 const registerService = async (email, lastname, name, userPassword) => {
@@ -29,61 +30,57 @@ const registerService = async (email, lastname, name, userPassword) => {
 
 const loginService = async (email, userPassword) => {
     try {
+        const user = await User.findOne({ where: { email } });
+        const passwordCorrect = user === null
+            ? false
+            : await bcrypt.compare(userPassword, user.password);
 
-        const user = await User.findOne({
-            where: { email: email }
-        });
-
-
-        if (!user) {
-            return { status: 404, data: 'Usuario no encontrado.' };
+        if (!(user && passwordCorrect)) {
+            return { status: 401, error: 'Email o contraseña inválidos.' };
         }
 
-        const isMatch = await bcrypt.compare(userPassword, user.password);
+        const userToken = token(user);
+        const { password, ...userWithoutPassword } = user.get();
+        return { status: 200, data: { ...userWithoutPassword, token: userToken } };
 
-        if (isMatch) {
-            const { password, ...userWithoutPassword } = user.get();
-            return { status: 200, data: userWithoutPassword };
-        } else {
-            return { status: 404, error: 'Contraseña incorrecta.' };
-        }
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         return { status: 500, error: 'Error al procesar la solicitud de login.' };
     }
-}
+};
+
 
 const addNewFavorite = async (templateId, userId) => {
     try {
-        const user =await User.findByPk(userId);
+        const user = await User.findByPk(userId);
         const template = await Template.findByPk(templateId);
         if (user && template) {
             await user.addFavorite(template);
-            return { status: 200, data: "Favorito añadido." }
+            return { status: 200, data: 'Favorito añadido.' };
         } else {
             return { status: 404, error: 'Usuario o Template no encontrado.' };
         }
     } catch (error) {
-        console.error(error);
-        return { status: 500, error: error.message };
+        console.error('Error al añadir a favoritos:', error);
+        return { status: 500, error: 'Error al procesar la solicitud.' };
     }
 };
 
 const getAllFavorites = async (userId) => {
-    
+
     try {
         const user = await User.findByPk(userId, {
-            include: [{
+            include: [ {
                 model: Template,
-                as: 'Favorites',  
+                as: 'Favorites',
                 through: {
-                    attributes: []  
+                    attributes: []
                 }
-            }]
+            } ]
         });
 
         if (!user) {
-            return{ status: 404, data: 'Usuario no encontrado' };
+            return { status: 404, data: 'Usuario no encontrado' };
         }
         const favorites = user.Favorites;
         return { status: 200, data: favorites };
@@ -98,7 +95,7 @@ const removeFavorite = async (templateId, userId) => {
         const template = await Template.findByPk(templateId);
 
         if (user && template) {
-            await user.removeFavorite(template); 
+            await user.removeFavorite(template);
             return { status: 200, data: "Favorito eliminado." };
         } else {
             return { status: 404, error: 'Usuario o Template no encontrado.' };
