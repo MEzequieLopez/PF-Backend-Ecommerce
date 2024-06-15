@@ -21,9 +21,9 @@ const loginUser = async (req, res) => {
     try {
         const response = await loginService(email, userPassword);
         if (response.error) {
-            return res.status(response.status).json({ error: response.error });
+            return res.status(response.status).send(response.error );
         }
-        return res.status(response.status).json(response.data);
+        return res.status(response.status).send(response.data);
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         return res.status(500).json({ error: 'Error interno del servidor.' });
@@ -37,9 +37,9 @@ const addFavorite = async (req, res) => {
     try {
         const response = await addNewFavorite(templateId, userId);
         if (response.error) {
-            return res.status(response.status).json({ error: response.error });
+            return res.status(response.status).send(response.error );
         }
-        return res.status(response.status).json({ data: response.data });
+        return res.status(response.status).send( response.data );
     } catch (error) {
         console.error('Error al añadir a favoritos:', error);
         return res.status(500).json({ error: 'Error interno del servidor.' });
@@ -47,7 +47,7 @@ const addFavorite = async (req, res) => {
 };
 
 const getFavorites = async (req, res) => {
-    const { userId } = req.params;
+    const userId = req.userId;
     try {
         const response = await getAllFavorites(userId);
         if (response.error) {
@@ -60,8 +60,8 @@ const getFavorites = async (req, res) => {
 }
 
 const deleteFavorite = async (req, res) => {
-    const { userId, templateId } = req.params;
-
+    const { templateId } = req.body;
+    const userId = req.userId;
     try {
         const result = await removeFavorite(templateId, userId);
         return res.status(result.status).send(result.data);

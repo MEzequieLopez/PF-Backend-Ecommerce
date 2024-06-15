@@ -6,7 +6,7 @@ userRouter
     .post("/register", registerUser)
     .post("/login", loginUser)
     .post("/favorite", loginRequire, addFavorite)
-    .get("/:userId/favorite", getFavorites)
-    .delete("/:userId/favorite/:templateId", deleteFavorite)
+    .get("/favorite",loginRequire, getFavorites)
+    .delete("/favorite",loginRequire, deleteFavorite)
 
 module.exports = userRouter
