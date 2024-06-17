@@ -107,25 +107,7 @@ const loadDb = async (req, res) => {
 
 // Verificamos si hay elementos en 'responseUrl'
 const responnn = await Template.findAll()
-// if(responseUrl.length > 0) {
-//     console.log(responnn.template);
-//     // Bucle while para iterar sobre cada elemento en 'responseUrl'
-//     while(i < responseUrl.length) {
-//         // Creamos una copia de la URL actual
-//         let urlCopy = responseUrl[i].slice();
-        
-//         // Verificamos si 'urlCopy' tiene un valor válido
-//         if(urlCopy) {
-//             console.log(urlCopy);
-            
-//             // Actualizamos el template con la nueva URL
-//             await Template.update({ image: urlCopy }, { where: { id: responnn.id }});
-//         }
-        
-//         // Incrementamos 'i' para avanzar al siguiente elemento en la próxima iteración
-//         i++;
-//     }
-// }
+
 for(let i = 0; i < responnn.length && i < responseUrl.length; i++) {
     // Creamos una copia de la URL actual de 'responseUrl'
     let urlCopy = responseUrl[i].slice();
