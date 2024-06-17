@@ -127,6 +127,7 @@ for(let i = 0; i < responnn.length && i < responseUrl.length; i++) {
         console.error(error);
         res.status(500).send('An error occurred while loading the data.');
     }
+    //subite de una vez lpm
 
 }
 module.exports = {
