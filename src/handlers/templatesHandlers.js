@@ -18,7 +18,8 @@ const getTemplates = async (req, res) => {
         if (templates.status === 404) {
             return res.status(templates.status).json(templates.error);
         }
-        return res.status(templates.status).json(templates.data);
+        
+        return res.status(templates.status).send(templates);
     } catch (error) {
         console.error(error);
         return res.json(error);

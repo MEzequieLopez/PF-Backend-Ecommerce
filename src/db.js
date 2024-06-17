@@ -45,14 +45,25 @@ const { Template, Category, Technology, User } = sequelize.models;
 
 // Category.hasMany(Template);
 // Template.belongsTo(Category);
+Technology.belongsToMany(Category, { through: 'TechnologyCategories' });
+Category.belongsToMany(Technology, { through: 'TechnologyCategories' });
+
 
 Template.belongsToMany(Category, { through: 'TemplateCategories' });
-Template.belongsToMany(User, { through: 'userFavorites', as:"Users" });
-Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
-
 Category.belongsToMany(Template, { through: 'TemplateCategories' });
-User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
+
+Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
+
+
+User.belongsToMany(Template, { through: 'userFavorites', as: 'Favorites' });
+Template.belongsToMany(User, { through: 'userFavorites', as: 'Users' });
+
+
+Template.belongsToMany(User, { through: 'UserFavorites' });
+User.belongsToMany(Template, { through: 'UserFavorites' });
+
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
