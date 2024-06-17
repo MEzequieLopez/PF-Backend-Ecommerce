@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken')
-const {SECRET} = process.env
+const { SECRET } = process.env
 
 
 module.exports = (user) => {
     const userForToken = {
-        username: user.email,
+        name: user.name,
+        lastename: user.lastename,
         id: user.id,
     }
     const token = jwt.sign(userForToken, SECRET)
-    console.log(token);
     return token
 }

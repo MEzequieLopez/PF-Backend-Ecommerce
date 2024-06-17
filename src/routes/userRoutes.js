@@ -5,6 +5,7 @@ const userRouter = require("express").Router();
 userRouter
     .post("/register", registerUser)
     .post("/login", loginUser)
+    .get("/",loginRequire,)
     .post("/favorite", loginRequire, addFavorite)
     .get("/favorite",loginRequire, getFavorites)
     .delete("/favorite",loginRequire, deleteFavorite)

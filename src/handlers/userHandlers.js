@@ -1,5 +1,3 @@
-const { User } = require('../db');
-const bcrypt = require('bcrypt');
 const { registerService, loginService, addNewFavorite, getAllFavorites, removeFavorite } = require('../services/usersServices');
 
 const registerUser = async (req, res) => {
@@ -21,7 +19,7 @@ const loginUser = async (req, res) => {
     try {
         const response = await loginService(email, userPassword);
         if (response.error) {
-            return res.status(response.status).send(response.error );
+            return res.status(response.status).send(response.error);
         }
         return res.status(response.status).send(response.data);
     } catch (error) {
@@ -30,16 +28,23 @@ const loginUser = async (req, res) => {
     }
 };
 
-
+const getUserInfo = async (req, res) => {
+    const userId = req.userId;
+try {
+    const response = await getUserInfo(userId)
+} catch (error) {
+    
+}
+}
 const addFavorite = async (req, res) => {
     const { templateId } = req.body;
     const userId = req.userId;
     try {
         const response = await addNewFavorite(templateId, userId);
         if (response.error) {
-            return res.status(response.status).send(response.error );
+            return res.status(response.status).send(response.error);
         }
-        return res.status(response.status).send( response.data );
+        return res.status(response.status).send(response.data);
     } catch (error) {
         console.error('Error al añadir a favoritos:', error);
         return res.status(500).json({ error: 'Error interno del servidor.' });

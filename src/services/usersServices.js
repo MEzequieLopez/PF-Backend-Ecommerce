@@ -40,8 +40,8 @@ const loginService = async (email, userPassword) => {
         }
 
         const userToken = token(user);
-        const { password, ...userWithoutPassword } = user.get();
-        return { status: 200, data: { ...userWithoutPassword, token: userToken } };
+        // const { password, ...userWithoutPassword } = user.get();
+        return { status: 200, data: {token: userToken}  };
 
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
