@@ -83,7 +83,7 @@ const loadDb = async (req, res) => {
             //     let urlCopy = responseUrl[i].slice(); // Crear una copia de la URL
             //     if(urlCopy){
             //   console.log(urlCopy);
-            //     await template.update({ image: urlCopy }, { where: { id: template.id }})
+            //     await template.update({ imasdsdsdsdsdsd
             // }}
 
             
