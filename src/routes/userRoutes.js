@@ -7,5 +7,5 @@ userRouter
     .post("/favorite", addFavorite)
     .get("/:userId/favorite", getFavorites)
     .delete("/:userId/favorite/:templateId", deleteFavorite)
-
+    
 module.exports = userRouter
