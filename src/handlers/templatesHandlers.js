@@ -88,6 +88,10 @@ const loadDb = async (req, res) => {
         res.status(500).send('An error occurred while loading the data.');
     }
 }
+
+
+
+
 module.exports = {
     getTemplates,
     getTemplateById,
