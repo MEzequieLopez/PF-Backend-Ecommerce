@@ -15,7 +15,7 @@ const registerService = async (email, lastname, name, userPassword) => {
             }
         });
         if (existingUser) {
-            return { error: `El email ${email} ya existe`, status: 400 }
+            return { error: `El email ${email} ya existe`, status: 409 }
         }
         const newUser = await User.create({
             name: name,
@@ -23,9 +23,8 @@ const registerService = async (email, lastname, name, userPassword) => {
             email: email,
             password: hashedPassword,
         });
-        const { password, ...userWithoutPassword } = newUser.get();
         await sendMail(email);
-        return { data: userWithoutPassword, status: 201 }
+        return { data: `Bien venido a Vega, ${name}`, status: 201 }
     } catch (error) {
         console.error('Error al crear el usuario:', error);
     }
@@ -39,13 +38,13 @@ const loginService = async (email, userPassword) => {
             : await bcrypt.compare(userPassword, user.password);
 
         if (!(user && passwordCorrect)) {
-            return { status: 401, error: 'Email o contraseña inválidos.' };
+            return { status: 400, error: 'Email o contraseña inválidos.' };
         }
 
         const userToken = token(user);
-        // const { password, ...userWithoutPassword } = user.get();
+        const { password, ...userWithoutPassword } = user.get();
         
-        return { status: 200, data: { token: userToken } };
+        return { status: 200, data: { token: userToken, userInfo: userWithoutPassword} };
 
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
