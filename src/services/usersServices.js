@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const { User, Template } = require('../db');
 const token = require('../utils/token');
+const sendMail = require('../utils/nodemailer');
+
 
 
 const registerService = async (email, lastname, name, userPassword) => {
@@ -22,6 +24,7 @@ const registerService = async (email, lastname, name, userPassword) => {
             password: hashedPassword,
         });
         const { password, ...userWithoutPassword } = newUser.get();
+        await sendMail(email);
         return { data: userWithoutPassword, status: 201 }
     } catch (error) {
         console.error('Error al crear el usuario:', error);
@@ -41,7 +44,8 @@ const loginService = async (email, userPassword) => {
 
         const userToken = token(user);
         // const { password, ...userWithoutPassword } = user.get();
-        return { status: 200, data: {token: userToken}  };
+        
+        return { status: 200, data: { token: userToken } };
 
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
