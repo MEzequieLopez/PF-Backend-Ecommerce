@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt');
 const { registerService, loginService, addNewFavorite, getAllFavorites, removeFavorite } = require('../services/usersServices');
 
 const registerUser = async (req, res) => {
-    const { email, lastname, name } = req.body;
+    const { email, lastname, name, image } = req.body;
     const userPassword = req.body.password;
     try {
-        const response = await registerService(email, lastname, name, userPassword);
+        const response = await registerService(email, lastname, name, userPassword, image);
         if (response.error) {
             return res.status(response.status).send(response.error);
         }

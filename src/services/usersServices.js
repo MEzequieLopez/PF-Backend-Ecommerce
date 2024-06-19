@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const { User, Template } = require('../db');
 
 
-const registerService = async (email, lastname, name, userPassword) => {
+const registerService = async (email, lastname, name, userPassword, image) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(userPassword, salt);

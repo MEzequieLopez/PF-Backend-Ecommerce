@@ -76,7 +76,6 @@ const loadDb = async (req, res) => {
                 name: templateData.name,
                 description: templateData.description,
                 price: templateData.price,
-                image : ""
             });
             
             // for (let i = 0; i <  responseUrl.length; i++) {
@@ -128,6 +127,10 @@ for(let i = 0; i < responnn.length && i < responseUrl.length; i++) {
         res.status(500).send('An error occurred while loading the data.');
     }
     //subite de una vez lpm
+    //asd
+    //asdasdad
+    //asdfasf
+    //asdasdad
 
 }
 module.exports = {
