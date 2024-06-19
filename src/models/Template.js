@@ -11,6 +11,7 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true // debe ser unico
     },
     description: {
       type: DataTypes.STRING,
@@ -31,5 +32,6 @@ module.exports = (sequelize) => {
   },
   {
     timestamps: false
+    // agreagar index aqui en todas las columnas
   });
 };
