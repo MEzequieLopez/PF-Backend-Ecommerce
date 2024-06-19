@@ -47,6 +47,9 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
 
 // Category.hasMany(Template);
 // Template.belongsTo(Category);
+Technology.belongsToMany(Category, { through: 'TechnologyCategories' });
+Category.belongsToMany(Technology, { through: 'TechnologyCategories' });
+
 
 // un template puede pertencer a varias categorias (many-to-many)
 Template.belongsToMany(Category, { through: 'TemplateCategories' });
