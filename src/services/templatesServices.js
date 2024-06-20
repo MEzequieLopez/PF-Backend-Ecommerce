@@ -80,9 +80,9 @@ const getTemplateId = async (id) => {
                         attributes: [],
                       }
                 },
-                // {
-                //     model: Review
-                // }
+                 {
+                     model: Review
+                 }
             ]
 
         })

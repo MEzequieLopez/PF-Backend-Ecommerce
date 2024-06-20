@@ -6,12 +6,13 @@ module.exports = (sequelize) => {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
-            allowNull: false
+            allowNull: false,
+            primaryKey: true,
         },
 
         user_id: {
             type: DataTypes.UUID,
-            allowNull: false
+            allowNull: false,
         },
 
         // id del template.

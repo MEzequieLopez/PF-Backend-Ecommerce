@@ -45,7 +45,7 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
   OrderPayment, PaymentStatus, ReportedTemplate, Admin
  } = sequelize.models;
 
-// Category.hasMany(Template);
+// Category.belongsToMany(Template);
 // Template.belongsTo(Category);
 Technology.belongsToMany(Category, { through: 'TechnologyCategories' });
 Category.belongsToMany(Technology, { through: 'TechnologyCategories' });
@@ -69,10 +69,16 @@ Image.belongsToMany(Template, {through: 'templateImages'});
 
 // relacion entre Review, Template y User.
 // va aqui
-User.hasMany(Review, {foreignKey: 'user_id'});
-Review.belongsTo(User, {foreignKey: 'user_id'});
-Review.belongsTo(Template, {foreignKey: 'template_id'}); // cada review debe ir asociada a un template.
-Template.hasMany(Review, {foreignKey: 'template_id'}); // cada template puede contener muchas reviews.
+User.belongsToMany(Review, // {foreignKey: 'user_id'}
+
+);
+Review.belongsTo(User, //{foreignKey: 'user_id'}
+  );
+Review.belongsTo(Template, //{foreignKey: 'template_id'}
+  ); // cada review debe ir asociada a un template.
+Template.belongsToMany(Review, //{foreignKey: 'template_id'}
+
+); // cada template puede contener muchas reviews.
 
 
 
@@ -85,17 +91,17 @@ Template.belongsToMany(Cart, {through: 'TemplateCart'});
 
 // Relacion entre Order, Template, y User.
 Order.belongsTo(User, {foreignKey: 'customer_id'}); // un usuario puede tener muchas ordenes. cada orden pertenece a un usuario.
-User.hasMany(OrderPayment, {foreignKey: 'customer_id'});
+User.belongsToMany(OrderPayment, {foreignKey: 'customer_id'});
 OrderPayment.belongsToMany(Template, {through: 'OrderPaymentTemplate'});
-Template.hasMany(OrderPayment, {through: 'OrderPaymentTemplate'}); 
+Template.belongsToMany(OrderPayment, {through: 'OrderPaymentTemplate'}); 
 
 PaymentStatus.belongsTo(OrderPayment, {foreignKey: 'payment_status_id'}); // es importante primero crear: Pending & Fulfilled en en la tabla PaymentStatus.
 
-PaymentStatus.hasMany(OrderPayment, {foreignKey: 'payment_status_id'}); // PaymentStatus (Pending & Fulfilled) pueden tener varias ordenes asociadas a ellas.
+PaymentStatus.belongsToMany(OrderPayment, {foreignKey: 'payment_status_id'}); // PaymentStatus (Pending & Fulfilled) pueden tener varias ordenes asociadas a ellas.
 OrderPayment.belongsTo(PaymentStatus, {foreignKey: 'payment_status_id'});
 
 OrderPayment.belongsTo(Order, {foreignKey: 'order_id'});
-Order.hasMany(OrderPayment, {foreignKey: 'order_id'});
+Order.belongsToMany(OrderPayment, {foreignKey: 'order_id'});
 
 // reported template.
 // cada report esta asociado a un usuario.
@@ -107,7 +113,7 @@ ReportedTemplate.belongsTo(Template, {foreignKey: 'template_id'});
 ReportedTemplate.belongsTo(Template, {foreignKey: 'template_id'});
 
 // un template puede contener varios reportes.
-Template.hasMany(ReportedTemplate, {foreignKey: 'template_id'});
+Template.belongsToMany(ReportedTemplate, {foreignKey: 'template_id'});
 
 // relaciones admin.
 // one-to-one

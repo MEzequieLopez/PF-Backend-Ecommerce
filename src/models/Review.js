@@ -16,12 +16,15 @@ module.exports = (sequelize) => {
 
     rating: {
       type: DataTypes.INTEGER,
-      allowNull: false
-
-    },
+      allowNull: false,
+      validate:{
+          max:5,
+          min:1
+      }
+  },
 
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false
 
     },
