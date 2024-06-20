@@ -69,19 +69,20 @@ Image.belongsToMany(Template, {through: 'templateImages'});
 
 // relacion entre Review, Template y User.
 // va aqui
-User.belongsToMany(Review, // {foreignKey: 'user_id'}
+
+/*User.belongsToMany(Review,  {foreignKey: 'user_id'}, {through: 'userReview'}
 
 );
-Review.belongsTo(User, //{foreignKey: 'user_id'}
+Review.belongsTo(User, {foreignKey: 'user_id'}, {through: 'userReview'}
   );
-Review.belongsTo(Template, //{foreignKey: 'template_id'}
+Review.belongsTo(Template, {foreignKey: 'template_id'}, {through: 'templateReview'}
   ); // cada review debe ir asociada a un template.
-Template.belongsToMany(Review, //{foreignKey: 'template_id'}
+Template.belongsToMany(Review, {foreignKey: 'template_id'}, {through: 'templateReview'}
 
 ); // cada template puede contener muchas reviews.
 
 
-
+/*
 // relacion Entre Cart, User, y Template.
 // va aqui.
 Cart.belongsTo(User, {foreignKey: 'user_id'}); // cada cart debe pertenecer a un usuario.
@@ -90,15 +91,15 @@ Template.belongsToMany(Cart, {through: 'TemplateCart'});
 
 
 // Relacion entre Order, Template, y User.
-Order.belongsTo(User, {foreignKey: 'customer_id'}); // un usuario puede tener muchas ordenes. cada orden pertenece a un usuario.
-User.belongsToMany(OrderPayment, {foreignKey: 'customer_id'});
-OrderPayment.belongsToMany(Template, {through: 'OrderPaymentTemplate'});
-Template.belongsToMany(OrderPayment, {through: 'OrderPaymentTemplate'}); 
+Order.belongsTo(User, {foreignKey: 'user_id'}); // un usuario puede tener muchas ordenes. cada orden pertenece a un usuario.
+User.hasMany(OrderPayment, {foreignKey: 'user_id'});
+// OrderPayment.belongsToMany(Template, {through: 'OrderPaymentTemplate'});
+// Template.hasMany(OrderPayment, {through: 'OrderPaymentTemplate'}); 
 
-PaymentStatus.belongsTo(OrderPayment, {foreignKey: 'payment_status_id'}); // es importante primero crear: Pending & Fulfilled en en la tabla PaymentStatus.
+// PaymentStatus.belongsTo(OrderPayment, {foreignKey: 'payment_status_id'}); // es importante primero crear: Pending & Fulfilled en en la tabla PaymentStatus.
 
-PaymentStatus.belongsToMany(OrderPayment, {foreignKey: 'payment_status_id'}); // PaymentStatus (Pending & Fulfilled) pueden tener varias ordenes asociadas a ellas.
-OrderPayment.belongsTo(PaymentStatus, {foreignKey: 'payment_status_id'});
+// PaymentStatus.hasMany(OrderPayment, {foreignKey: 'payment_status_id'}); // PaymentStatus (Pending & Fulfilled) pueden tener varias ordenes asociadas a ellas.
+// OrderPayment.belongsTo(PaymentStatus, {foreignKey: 'payment_status_id'});
 
 OrderPayment.belongsTo(Order, {foreignKey: 'order_id'});
 Order.belongsToMany(OrderPayment, {foreignKey: 'order_id'});
