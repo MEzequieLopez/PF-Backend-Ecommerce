@@ -73,61 +73,46 @@
     ],
     "categories": [
         {
-            "name": "Ecommerce"
+            "name": "Tienda de electronicos"
         },
         {
-            "name": "Electronics"
+            "name": "Eventos especiales"
         },
         {
-            "name": "Automobile"
+            "name": "Tienda de ropa"
         },
         {
-            "name": "Showcase"
+            "name": "Portal de noticias"
         },
         {
-            "name": "Clothing"
+            "name": "Blogs"
         },
         {
-            "name": "News"
-        },
-        {
-            "name": "Portal"
-        },
-        {
-            "name": "Blog"
-        },
-        {
-            "name": "Tech"
-        },
-        {
-            "name": "Real Estate"
-        },
-        {
-            "name": "Listings"
+            "name": "Salud y belleza"
         },
         {
             "name": "Fitness"
         },
         {
-            "name": "Health"
+            "name": "Restaurante"
         },
         {
-            "name": "Restaurant"
+            "name": "Renta de servicios"
         },
         {
-            "name": "Menu"
+            "name": "Tienda en linea"
         },
         {
-            "name": "Education"
+            "name": "Negocios"
         },
         {
-            "name": "Platform"
+            "name": "Entretenimiento"
         },
         {
-            "name": "Corporate"
+            "name": "Streaming"
         },
         {
-            "name": "Business"
+            "name": "Vienes inmuebles"
         }
     ],
     "technologies": [

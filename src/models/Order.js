@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         // usuario al cual pertenece la orden
-        customer_id: {
+        user_id: {
             type: DataTypes.UUID,
             allowNull: false
         },
@@ -17,12 +17,15 @@ module.exports = (sequelize) => {
             type: DataTypes.UUID,
             allowNull: false
         },
-
+        total_amount: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
         // ? esto debe ir ?
-    //    order_date: {
-    //        type: DataTypes.DATE,
-    //        defaultValue: sequelize.NOW
-    //    },
+       order_date: {
+           type: DataTypes.DATE,
+           defaultValue: sequelize.NOW
+       },
 
         // total_amount: ?
 
