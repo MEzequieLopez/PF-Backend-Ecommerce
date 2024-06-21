@@ -109,10 +109,32 @@ const removeFavorite = async (templateId, userId) => {
     }
 };
 
+const userId = async (id) => {
+    try {
+        let user = await User.findByPk(id, {
+            include:[{
+                model:Review,
+            },{
+                model: Template,
+                attributes:["name","id"],
+                through:{attributes:[]}
+            }
+        ],            
+        } )
+        if(!user) throw 'Usuario no encontrado';
+        else{
+            return user;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     registerService,
     loginService,
     addNewFavorite,
     getAllFavorites,
-    removeFavorite
+    removeFavorite,
+    userId
 }

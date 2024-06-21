@@ -4,31 +4,26 @@ const getReviewsServices = async ()=> {
     return await Review.findAll()
 }
 
-const postReviewServices = async ({content, rating, date, templateId })=> {
+
+const postReviewServices = async (obj)=>{
     try {
-        if( /*!emailUser || */ !content || !rating || !date || !templateId){
-            throw 'Missing data!';
-        } 
+        if(!obj.idUser || !obj.rating || !obj.content || !obj.idTemplate) throw 'Faltan datos obligatorios';
         else{
-
-            let review= {
-                //email del usuario
-                content: content,
-                rating: rating,
-                date: date,
-                templateId: templateId
+            let objReview= {
+                idUser:obj.idUser,
+                rating:obj.rating,
+                content:obj.content,
+                
+                idTemplate:obj.idTemplate
             }
-            let newReview = await Review.create(review);
+            let newReview = await Review.create(objReview);
             return newReview;
-
         }
     } catch (error) {
         console.error(error);
         return error
     }
-
 }
-
 
 module.exports = {
     getReviewsServices,

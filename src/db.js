@@ -67,8 +67,14 @@ Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 Template.belongsToMany(Image, {through: 'templateImages'});
 Image.belongsToMany(Template, {through: 'templateImages'});
 
-// relacion entre Review, Template y User.
-// va aqui
+
+//Relacion entre Template y review 
+Template.hasMany(Review);
+Review.belongsTo(Template);
+
+//Relacion entre usuario y review
+User.hasMany(Review);
+Review.belongsTo(User);
 
 /*User.belongsToMany(Review,  {foreignKey: 'user_id'}, {through: 'userReview'}
 
