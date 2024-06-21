@@ -186,7 +186,6 @@ const getProfile = async (req, res) => {
         return res.status(400).json({ message: 'La contraseña actual es incorrecta' });
       }
   
-      // Generar un hash de la nueva contraseña
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
   
