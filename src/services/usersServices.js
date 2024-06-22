@@ -4,7 +4,6 @@ const token = require('../utils/token');
 const sendMail = require('../utils/nodemailer');
 
 
-
 const registerService = async (email, lastname, name, userPassword) => {
     try {
         const salt = await bcrypt.genSalt(10);
@@ -109,32 +108,107 @@ const removeFavorite = async (templateId, userId) => {
     }
 };
 
-const userId = async (id) => {
-    try {
-        let user = await User.findByPk(id, {
-            include:[{
-                model:Review,
-            },{
-                model: Template,
-                attributes:["name","id"],
-                through:{attributes:[]}
-            }
-        ],            
-        } )
-        if(!user) throw 'Usuario no encontrado';
-        else{
-            return user;
-        }
-    } catch (error) {
-        throw error;
-    }
-}
 
+const getProfile = async (req, res) => {
+    try {
+      const userId = req.userId; 
+  
+      if (!userId) {
+        return res.status(404).json({ message: 'Perfil no encontrado' });
+      }
+  
+      
+      const userProfileData = await User.findOne({
+        where: { id: userId },
+        attributes: { exclude: ['password'] } 
+      });
+  
+      if (!userProfileData) {
+        return res.status(404).json({ message: 'Perfil no encontrado' });
+      }
+  
+      
+      res.status(200).json(userProfileData);
+    } catch (error) {
+      console.error('Error al obtener el perfil:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  };
+
+  const updateProfile = async (req, res) => {
+    const {name, lastname, email } = req.body;
+  
+    try {
+      const userId = req.userId;
+  
+      if (!userId) {
+        return res.status(404).json({ message: 'Perfil no encontrado' });
+      }
+  
+      
+      await User.update(
+        {
+        
+          name: name || req.user.name,
+          lastname: lastname || req.user.lastname,
+          email: email || req.user.email,
+        },
+        { where: { id: userId } }
+      );
+  
+      
+      const updatedProfile = await User.findOne({
+        where: { id: userId },
+        attributes: { exclude: ['password'] }
+      });
+  
+      res.status(200).json(updatedProfile);
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  };  
+
+  const changePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.userId;
+  
+    try {
+      const user = await User.findOne({ where: { id: userId } });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+  
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+  
+      if (!isPasswordValid) {
+        return res.status(400).json({ message: 'La contraseña actual es incorrecta' });
+      }
+  
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+  
+      await User.update(
+        { password: hashedPassword },
+        { where: { id: userId } }
+      );
+  
+      res.status(200).json({ message: 'Contraseña actualizada exitosamente' });
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  };
+  
+  
 module.exports = {
     registerService,
     loginService,
     addNewFavorite,
     getAllFavorites,
     removeFavorite,
-    userId
+    getProfile,
+    updateProfile,
+    changePassword
 }
