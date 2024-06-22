@@ -69,7 +69,7 @@ Image.belongsToMany(Template, {through: 'templateImages'});
 
 // relacion entre Review, Template y User.
 // va aqui
-User.hasMany(Review, {foreignKey: 'user_id'});
+/* User.hasMany(Review, {foreignKey: 'user_id'});
 Review.belongsTo(User, {foreignKey: 'user_id'});
 Review.belongsTo(Template, {foreignKey: 'template_id'}); // cada review debe ir asociada a un template.
 Template.hasMany(Review, {foreignKey: 'template_id'}); // cada template puede contener muchas reviews.
@@ -113,7 +113,7 @@ Template.hasMany(ReportedTemplate, {foreignKey: 'template_id'});
 // one-to-one
 User.hasOne(Admin, {foreignKey: 'user_id'});
 Admin.belongsTo(User, {foreignKey: 'user_id'})
-
+ */
 /**
  * Order.belongsTo(User, { foreignKey: 'user_id' });
 Order.belongsToMany(Template, { through: 'OrderTemplate' });
