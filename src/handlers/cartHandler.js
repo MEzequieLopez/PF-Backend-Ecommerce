@@ -12,12 +12,9 @@ const addItemToCart = async () => {
     const template_id = req.body.template_id;
 
     try {
-
         let cart = await Cart.findOne({where: {user_id}});
-
         // si es que no hay carrito significa que el usuario aun no habia agregado nada.
         // entonces crearlo rapidamente.
-
         if (!cart) {
             await Cart.create({user_id, template_id})
         }
