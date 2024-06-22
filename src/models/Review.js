@@ -14,17 +14,19 @@ module.exports = (sequelize) => {
       allowNull: false,
     }, 
 
+    
     rating: {
       type: DataTypes.INTEGER,
-      allowNull: false
-
-    },
+      allowNull: false,
+      validate:{
+          max:5,
+          min:1
+      }
+  },
 
     date: {
       type: DataTypes.DATE,
-      allowNull: false,
-      
-
+      defaultValue: sequelize.NOW
     },
 
   },

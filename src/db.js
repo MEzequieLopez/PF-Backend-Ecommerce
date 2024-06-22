@@ -45,7 +45,7 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
   OrderPayment, PaymentStatus, ReportedTemplate, Admin
  } = sequelize.models;
 
-// Category.hasMany(Template);
+// Category.belongsToMany(Template);
 // Template.belongsTo(Category);
 Technology.belongsToMany(Category, { through: 'TechnologyCategories' });
 Category.belongsToMany(Technology, { through: 'TechnologyCategories' });
@@ -61,12 +61,29 @@ Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 // relacion entre Image y Template (many-to-many)
 Template.belongsToMany(Image, {through: 'templateImages'});
 Image.belongsToMany(Template, {through: 'templateImages'});
-// relacion entre Review, Template y User.
-// va aqui
-User.hasMany(Review, {foreignKey: 'user_id'});
-Review.belongsTo(User, {foreignKey: 'user_id'});
-Review.belongsTo(Template, {foreignKey: 'template_id'}); // cada review debe ir asociada a un template.
-Template.hasMany(Review, {foreignKey: 'template_id'}); // cada template puede contener muchas reviews.
+
+
+//Relacion entre Template y review 
+Template.hasMany(Review);
+Review.belongsTo(Template);
+
+//Relacion entre usuario y review
+User.hasMany(Review);
+Review.belongsTo(User);
+
+/*User.belongsToMany(Review,  {foreignKey: 'user_id'}, {through: 'userReview'}
+
+);
+Review.belongsTo(User, {foreignKey: 'user_id'}, {through: 'userReview'}
+  );
+Review.belongsTo(Template, {foreignKey: 'template_id'}, {through: 'templateReview'}
+  ); // cada review debe ir asociada a un template.
+Template.belongsToMany(Review, {foreignKey: 'template_id'}, {through: 'templateReview'}
+
+); // cada template puede contener muchas reviews.
+
+
+/*
 // relacion Entre Cart, User, y Template.
 // va aqui.
 Cart.belongsTo(User, {foreignKey: 'user_id'}); // cada cart debe pertenecer a un usuario.
@@ -81,7 +98,8 @@ User.hasMany(OrderPayment, {foreignKey: 'user_id'});
 // PaymentStatus.hasMany(OrderPayment, {foreignKey: 'payment_status_id'}); // PaymentStatus (Pending & Fulfilled) pueden tener varias ordenes asociadas a ellas.
 // OrderPayment.belongsTo(PaymentStatus, {foreignKey: 'payment_status_id'});
 OrderPayment.belongsTo(Order, {foreignKey: 'order_id'});
-Order.hasMany(OrderPayment, {foreignKey: 'order_id'});
+Order.belongsToMany(OrderPayment, {foreignKey: 'order_id'});
+
 // reported template.
 // cada report esta asociado a un usuario.
 ReportedTemplate.belongsTo(User, {foreignKey: 'user_id'});
@@ -90,7 +108,8 @@ ReportedTemplate.belongsTo(Template, {foreignKey: 'template_id'});
 // cada reporte pertenece a un template.
 ReportedTemplate.belongsTo(Template, {foreignKey: 'template_id'});
 // un template puede contener varios reportes.
-Template.hasMany(ReportedTemplate, {foreignKey: 'template_id'});
+Template.belongsToMany(ReportedTemplate, {foreignKey: 'template_id'});
+
 // relaciones admin.
 // one-to-one
 User.hasOne(Admin, {foreignKey: 'user_id'});
