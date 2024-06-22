@@ -13,10 +13,10 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         // id del template que se va a comprar.
-        product_id: {
-            type: DataTypes.UUID,
-            allowNull: false
-        },
+        // product_id: {
+        //     type: DataTypes.UUID,
+        //     allowNull: false
+        // },
         total_amount: {
             type: DataTypes.FLOAT,
             allowNull: false,
@@ -26,8 +26,15 @@ module.exports = (sequelize) => {
            type: DataTypes.DATE,
            defaultValue: sequelize.NOW
        },
-
-        // total_amount: ?
+       status: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: "pending"
+       },
+       stripe_session_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+       }
 
     });
 };

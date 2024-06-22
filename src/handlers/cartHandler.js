@@ -8,7 +8,7 @@ const { Category, Technology, Template, Cart } = require("../db");
 
 // agregar un template al carrito
 const addItemToCart = async () => {
-    const user_id = req.user.user_id; // extraer userId del JWT.
+    const user_id = req.userId; // extraer userId del JWT.
     const template_id = req.body.template_id;
 
     try {
@@ -41,7 +41,7 @@ const addItemToCart = async () => {
 
 // limpiar todo el carrito
 const clearCart = async () => {
-    const user_id = req.user.user_id;
+    const user_id = req.userId
 
     try {
         
@@ -61,7 +61,7 @@ const clearCart = async () => {
 
 // eliminar un template especifico del carrito.
 const deleteTemplateFromCart = async () => {
-    const user_id = req.user.user_id;
+    const user_id = req.userId;
     const template_id = req.body.template_id;
 
     if (!template_id) {
@@ -99,7 +99,7 @@ const viewCart = async () => {
 
     try {
         
-    const user_id = req.user.user_id; // user_id estare en "req" gracias a los JWT
+    const user_id = req.userId; // user_id estare en "req" gracias a los JWT
     const userCart = await Cart.findOne({where: {user_id: user_id}});
 
     // si es que no hay cart entonces significa que 

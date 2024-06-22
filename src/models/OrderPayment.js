@@ -8,15 +8,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             primaryKey: true
         },
-
-        // Payment_ID <-- del modelo entidad relacion. <== referencia a Order(id)
-        // order_id: {
-        //     type: DataTypes.UUID,
-        //     allowNull: false
-        // },
-
-        // referencia a la tabla PaymentStatus(id) (puede ser Pending o Fulfilled)
-        payment_status_id: {
+        payment_stripe_id: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -24,12 +16,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        // 
-        // payment_date: {
-        //     type: DataTypes.DATE,
-        //     defaultValue: sequelize.NOW,
-        //     allowNull: false
-        // },
+        payment_date: {
+            type: DataTypes.DATE,
+            defaultValue: sequelize.NOW,
+            allowNull: false
+        },
         status: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -42,6 +33,10 @@ module.exports = (sequelize) => {
             allowNull: false,
             defaultValue: 0
         },
+        paymentMethod: {
+            type: DataTypes.STRING,
+            allowNull: false,
+          },
     
     }) 
 };

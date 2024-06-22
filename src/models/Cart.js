@@ -8,11 +8,15 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         user_id: {
-            type: DataTypes.UUID, 
-            allowNull: false
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: {
+                model: 'Users',
+                key: 'id',
+            },
         },
         template_id: {
-            type: DataTypes.UUID, 
+            type: DataTypes.UUID,
             allowNull: false
         },
         total_amount: {
@@ -20,6 +24,6 @@ module.exports = (sequelize) => {
             allowNull: false,
             defaultValue: 0
         },
-        
+
     });
 };

@@ -2,29 +2,43 @@ const { OrderPayment } = require("../db")
 const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-const paymentIntent = async (amount, userId, orderId) => {
+const paymentIntent = async (userId) => {
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: 'usd',
+    const userCart = await Cart.findOne({ where: { user_id: userId }, include: Template });
+    const order = await Order.create({
+      user_id: userId,
+      total_amount: userCart.Templates.reduce((total, template) => total + template.price, 0),
+      status: 'pending'
     });
 
-    // Guardar detalles del pago en la base de datos
-    await OrderPayment.create({
-      userId,
-      payment_status_id: paymentIntent.id,
-      amount,
-      currency: 'usd',
-      status: 'pending',
+    await order.addTemplates(userCart.Templates);
+
+    const lineItems = userCart.Templates.map(template => ({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: template.title,
+        },
+        unit_amount: template.price * 100,
+      },
+      quantity: 1,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      mode: 'payment',
+      success_url: `http://localhost:3001/success?session_id={CHECKOUT_SESSION_ID}&order_id=${order.id}`,
+      cancel_url: 'http://localhost:3001/cancel',
     });
-    return {
-      clientSecret: paymentIntent.client_secret,
-      status: 200
-    }
+    order.stripe_session_id = session.id;
+    await order.save();
+
+    return { id: session.id };
   } catch (error) {
-    console.error(error);
-    return { error: error.message, status: 500 };
+    return error
   }
+
 }
 
 module.exports = {
