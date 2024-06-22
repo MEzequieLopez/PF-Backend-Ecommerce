@@ -8,7 +8,7 @@ const { Category, Technology, Template, Cart } = require("../db");
 
 // agregar un template al carrito
 const addItemToCart = async () => {
-    const user_id = req.user.user_id; // extraer userId del JWT.
+    const user_id = req.user.userId;; // extraer userId del JWT.
     const template_id = req.body.template_id;
 
     try {
@@ -40,8 +40,8 @@ const addItemToCart = async () => {
 };
 
 // limpiar todo el carrito
-const clearCart = async () => {
-    const user_id = req.user.user_id;
+const clearCart = async (req, res) => {
+    const user_id = req.userId;
 
     try {
         
@@ -60,8 +60,8 @@ const clearCart = async () => {
 };
 
 // eliminar un template especifico del carrito.
-const deleteTemplateFromCart = async () => {
-    const user_id = req.user.user_id;
+const deleteTemplateFromCart = async (req, res) => {
+    const user_id = req.user.userId;
     const template_id = req.body.template_id;
 
     if (!template_id) {
@@ -95,11 +95,10 @@ const deleteTemplateFromCart = async () => {
 };
 
 // ver el carrito del usuario.
-const viewCart = async () => {
+const viewCart = async (req, res) => {
 
     try {
-        
-    const user_id = req.user.user_id; // user_id estare en "req" gracias a los JWT
+    const user_id = req.userId; // user_id estare en "req" gracias a los JWT
     const userCart = await Cart.findOne({where: {user_id: user_id}});
 
     // si es que no hay cart entonces significa que 
@@ -112,7 +111,7 @@ const viewCart = async () => {
     res.json(userCart);
 
     } catch (error) {
-        res.status(500).json(`Internal Server Error: ${error}`)
+        res.status(500).json(`Internal Server Error: ${error} ${req.info}`)
     }
 };
 
@@ -120,6 +119,8 @@ const viewCart = async () => {
 module.exports = {
     addItemToCart,
     clearCart,
+    deleteTemplateFromCart,
+    viewCart
 
 }
 

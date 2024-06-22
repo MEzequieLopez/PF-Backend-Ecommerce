@@ -5,7 +5,7 @@ const templatesRouter = require("express").Router();
 
 templatesRouter
     .get("/", getTemplates)
-    .post("/loadDb", loadDb)
+    .post("/loadDb", loadDb) 
     .get("/technologies", getTechnologies)
     .get("/categories", getCategories)
     .get('/:id', getTemplateById)
