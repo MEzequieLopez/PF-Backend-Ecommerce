@@ -4,12 +4,6 @@ const getReviewsServices = async ()=> {
     return await Review.findAll()
 }
 
-
-
-
-
-
-
 const postReviewServices = async (obj)=>{
     try {
         if(!obj.idUser || !obj.rating || !obj.content || !obj.idTemplate) throw 'Faltan datos obligatorios';
