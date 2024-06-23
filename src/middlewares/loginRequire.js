@@ -3,6 +3,7 @@ const {SECRET} = process.env
 
 module.exports = (req, res, next) => {
     const authHeader = req.headers['authorization'];
+    
     if (!authHeader) {
         return res.status(401).json({ error: 'No se provee de un token, autorizacion negada' });
     }
