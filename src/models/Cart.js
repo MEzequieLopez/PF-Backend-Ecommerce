@@ -10,20 +10,11 @@ module.exports = (sequelize) => {
         user_id: {
             type: DataTypes.UUID,
             allowNull: false,
-            references: {
-                model: 'Users',
-                key: 'id',
-            },
-        },
-        template_id: {
-            type: DataTypes.UUID,
-            allowNull: false
         },
         total_amount: {
             type: DataTypes.FLOAT,
             allowNull: false,
             defaultValue: 0
         },
-
     });
 };

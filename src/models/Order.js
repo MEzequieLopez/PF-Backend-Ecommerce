@@ -22,19 +22,19 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         // ? esto debe ir ?
-       order_date: {
-           type: DataTypes.DATE,
-           defaultValue: sequelize.NOW
-       },
-       status: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: "pending"
-       },
-       stripe_session_id: {
-        type: DataTypes.STRING,
-        allowNull: true,
-       }
+        order_date: {
+            type: DataTypes.DATE,
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+        },
+        status: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: "pending"
+        },
+        stripe_session_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        }
 
     });
 };

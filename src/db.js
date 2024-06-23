@@ -71,6 +71,18 @@ Review.belongsTo(Template);
 User.hasMany(Review);
 Review.belongsTo(User);
 
+User.hasOne(Cart);
+Cart.belongsTo(User);
+
+User.hasMany(Order, { foreignKey: 'user_id' });
+Order.belongsTo(User, { foreignKey: 'user_id' });
+
+Cart.belongsToMany(Template, { through: 'CartTemplates', as: "inCart"});
+Template.belongsToMany(Cart, { through: 'CartTemplates', as: "toCart" });
+
+Order.belongsToMany(Template, { through: 'OrderTemplates', as: 'purchasedTemplates' });
+Template.belongsToMany(Order, { through: 'OrderTemplates', as: 'orders' });
+
 /*User.belongsToMany(Review,  {foreignKey: 'user_id'}, {through: 'userReview'}
 
 );
