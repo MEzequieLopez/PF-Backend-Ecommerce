@@ -24,7 +24,7 @@ module.exports = (sequelize) => {
     image:{ type: DataTypes.STRING,
       allowNull: false,
     },
-    },
+    
     
     // deleted_at: {aqui se puede incluir soft-deletion} o paranoid: true
     deleted_at: {

@@ -69,12 +69,30 @@ Image.belongsToMany(Template, {through: 'templateImages'});
 
 
 //Relacion entre Template y review 
-Template.hasMany(Review);
-Review.belongsTo(Template);
+//Template.hasMany(Review);
+//Review.belongsTo(Template);
 
 //Relacion entre usuario y review
-User.hasMany(Review);
-Review.belongsTo(User);
+//User.hasMany(Review);
+//Review.belongsTo(User);
+Template.hasMany(Review, {
+  foreignKey: 'templateId', 
+  as: 'reviews' 
+});
+
+Review.belongsTo(Template, {
+  foreignKey: 'templateId' 
+});
+
+
+User.hasMany(Review, {
+  foreignKey: 'userId', 
+  as: 'reviews' 
+});
+
+Review.belongsTo(User, {
+  foreignKey: 'userId' 
+});
 
 /*User.belongsToMany(Review,  {foreignKey: 'user_id'}, {through: 'userReview'}
 
