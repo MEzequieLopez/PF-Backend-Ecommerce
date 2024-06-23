@@ -12,6 +12,7 @@ const addItemToCart = async (req, res) => {
     const template_id = req.body.template_id;
 
     try {
+        console.log({user_id, template_id});
         let cart = await Cart.findOne({ where: { user_id} });
         let template = await Template.findByPk(template_id);
 
@@ -36,7 +37,16 @@ const addItemToCart = async (req, res) => {
 
         const existingTemplate = await cart.getInCart({ where: { id: template_id } });
         if (existingTemplate.length) {
-            return res.send({ message: "La plantilla ya está en el carrito", data: cart });
+            const cartWithTemplates = await Cart.findByPk(cart.id, {
+                include: [{
+                    model: Template,
+                    as: 'inCart',
+                    through: {
+                        attributes: []
+                    }
+                }]
+            });
+            return res.send({ message: "La plantilla ya está en el carrito", data: cartWithTemplates});
         }
 
         await cart.addInCart(template);
@@ -54,7 +64,7 @@ const addItemToCart = async (req, res) => {
         const total = cartWithTemplates.inCart.reduce((acc, item) => acc + item.price, 0);
         cart.total_amount = parseFloat(total.toFixed(2));
         await cart.save();
-        return res.send({ message: "Plantilla añadida al carrito", data: cart });
+        return res.send({ message: "Plantilla añadida al carrito", data: cartWithTemplates });
     } catch (error) {
         return res.status(500).json(`Internal Server Error: ${error}`);
     }
@@ -84,39 +94,54 @@ const clearCart = async () => {
 };
 
 // eliminar un template especifico del carrito.
-const deleteTemplateFromCart = async () => {
+const deleteTemplateFromCart = async (req, res) => {
     const user_id = req.userId;
     const template_id = req.body.template_id;
+    console.log(user_id);
 
     if (!template_id) {
-        return res.status(400).json({ missingTemplate: 'Debes incluir un template a eliminar' });
-    };
+        return res.status(400).json({ message: 'Debes incluir un template a eliminar' });
+    }
 
     try {
-
-        // encontrar cart del usuario (esto tambien verifica si tiene algo agregado)
-        const cart = await Cart.findOne({ where: user_id });
+        // Find the user's cart
+        const cart = await Cart.findOne({ where: { user_id } });
 
         if (!cart) {
-            return res.status(404).json({ cartNotFound: 'Aun no tienes nada en el carrito' })
-        };
-        // automaticamente apenas agreguen algo al carrito, se creara una entrada
-        // asociada a ese usuario.
+            return res.status(404).json({ message: 'Aun no tienes nada en el carrito' });
+        }
 
-        const templateToDelete = await Cart.findOne({ where: { template_id: template_id } });
+        // Check if the template exists in the cart
+        const existingTemplate = await cart.getInCart({ where: { id: template_id } });
 
-        if (!templateToDelete) {
-            return res.status(404).json({ templateNotFound: 'El template no existe' })
-        };
+        if (!existingTemplate.length) {
+            return res.status(404).json({ message: 'El template no existe en el carrito' });
+        }
 
-        await Cart.destroy({ where: { template_id: template_id } });
+        // Remove the template from the cart
+        await cart.removeInCart(existingTemplate[0]);
 
-        res.json({ message: `Template con id: ${template_id} eliminado con exito` })
+        // Recalculate the total amount in the cart
+        const cartWithTemplates = await Cart.findByPk(cart.id, {
+            include: [{
+                model: Template,
+                as: 'inCart',
+                through: {
+                    attributes: []
+                }
+            }]
+        });
 
+        const total = cartWithTemplates.inCart.reduce((acc, item) => acc + item.price, 0);
+        cart.total_amount = parseFloat(total.toFixed(2));
+        await cart.save();
+
+        return res.send({ message: `Template con id: ${template_id} eliminado con éxito`, data: cartWithTemplates });
     } catch (error) {
-        res.status(500).json(`Internal Server Error: ${error}`);
+        return res.status(500).json(`Internal Server Error: ${error}`);
     }
 };
+
 
 // ver el carrito del usuario.
 const viewCart = async () => {
@@ -144,6 +169,7 @@ const viewCart = async () => {
 module.exports = {
     addItemToCart,
     clearCart,
+    deleteTemplateFromCart
 
 }
 
