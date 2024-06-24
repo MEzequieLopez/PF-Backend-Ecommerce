@@ -1,8 +1,11 @@
-const { getReviewsServices, postReviewServices} = require("../services/reviewsServices")
+const { getReviewsDetailServices, getReviewsUserServices, postReviewServices} = require("../services/reviewsServices")
 
-const getReviews = async (req, res) => {
+const getReviewsTemplate = async (req, res) => {
+    const templateId= req.query.templateId
+    console.log(templateId)
+
     try {
-        const response = await getReviewsServices()
+        const response = await getReviewsDetailServices(templateId)
         
         if(!response || Object.keys(response).length === 0 ){
             res.status(404).send('No reviews found')
@@ -16,10 +19,36 @@ const getReviews = async (req, res) => {
     }
 }
 
-const postReview = async (req, res)=> {
+const getReviewsUser = async (req, res) => {
+    const userId= req.userId
+    console.log(userId)
 
     try {
-        let newReview = await postReviewServices(req.body);
+        const response = await getReviewsUserServices(userId)
+        
+        if(!response || Object.keys(response).length === 0 ){
+            res.status(404).send('No user found')
+        }
+        
+        res.status(200).send(response)
+
+    } catch (error) {
+        console.error(error);
+        return res.json(error);
+    }
+}
+
+const postReview = async (req, res)=> {
+    const userId= req.userId
+    const templeId= req.body.templateId
+    const obj= req.body
+
+    console.log(userId)
+    console.log(templeId)
+    console.log(obj)
+
+    try {
+        let newReview = await postReviewServices(userId, templeId, obj);
 
         res.status(200).send(newReview)
 
@@ -32,6 +61,7 @@ const postReview = async (req, res)=> {
 }
 
 module.exports = {
-    getReviews,
+    getReviewsUser,
+    getReviewsTemplate,
     postReview
 }
