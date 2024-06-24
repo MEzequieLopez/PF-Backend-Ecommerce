@@ -1,74 +1,103 @@
+
 {
-    "templates": [
+"templates": [
         {
-            "name": "Ecommerce Electronics",
-            "description": "A modern and responsive ecommerce template for electronics built with React and Tailwind CSS.",
-            "price": 49.99,
-            "technologies": ["React", "Tailwind CSS"],
-            "categories": ["Ecommerce", "Electronics"]
-        },
-        {
-            "name": "Automobile Showcase",
-            "description": "A sleek automobile showcase website template using Vue and Bootstrap.",
-            "price": 59.99,
-            "technologies": ["Vue", "Bootstrap"],
-            "categories": ["Automobile", "Showcase"]
-        },
-        {
-            "name": "Clothing Store",
-            "description": "A stylish clothing store template designed with Angular and SASS.",
-            "price": 39.99,
-            "technologies": ["Angular", "SASS"],
-            "categories": ["Ecommerce", "Clothing"]
-        },
-        {
-            "name": "News Portal",
-            "description": "A dynamic news portal template created with Next.js and Tailwind CSS.",
+            "name": "Tienda de electrónicos",
+            "description": "Una plantilla de tienda de electrónicos profesional utilizando Angular y Bootstrap.",
             "price": 69.99,
-            "technologies": ["Next.js", "Tailwind CSS"],
-            "categories": ["News", "Portal"]
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Tienda de electronicos"]
         },
         {
-            "name": "Tech Blog",
-            "description": "A clean and modern tech blog template using Astro and CSS Modules.",
+            "name": "Eventos especiales",
+            "description": "Una plantilla para la gestión de eventos especiales con Angular y Bootstrap.",
             "price": 29.99,
-            "technologies": ["Astro", "CSS Modules"],
-            "categories": ["Blog", "Tech"]
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Eventos especiales"]
         },
         {
-            "name": "Real Estate Listings",
-            "description": "A comprehensive real estate listings template built with Svelte and Bootstrap.",
-            "price": 54.99,
-            "technologies": ["Svelte", "Bootstrap"],
-            "categories": ["Real Estate", "Listings"]
+            "name": "Tienda de ropa",
+            "description": "Una plantilla de tienda de ropa elegante y moderna utilizando Angular y Bootstrap.",
+            "price": 79.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Tienda de ropa"]
         },
         {
-            "name": "Fitness Website",
-            "description": "A high-energy fitness website template created with React and Material UI.",
-            "price": 44.99,
-            "technologies": ["React", "Material UI"],
-            "categories": ["Fitness", "Health"]
+            "name": "Portal de noticias",
+            "description": "Una plantilla de portal de noticias dinámico y responsivo utilizando Angular y Bootstrap.",
+            "price": 69.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Portal de noticias"]
         },
         {
-            "name": "Restaurant Menu",
-            "description": "A mouth-watering restaurant menu template built using Vue and Tailwind CSS.",
-            "price": 34.99,
-            "technologies": ["Vue", "Tailwind CSS"],
-            "categories": ["Restaurant", "Menu"]
+            "name": "Blogs",
+            "description": "Una plantilla de blog personalizable y atractiva utilizando Angular y Bootstrap.",
+            "price": 39.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Blogs"]
         },
         {
-            "name": "Educational Platform",
-            "description": "An educational platform template designed with Nuxt.js and Vuetify.",
-            "price": 64.99,
-            "technologies": ["Nuxt.js", "Vuetify"],
-            "categories": ["Education", "Platform"]
-        },
-        {
-            "name": "Corporate Website",
-            "description": "A professional corporate website template using Angular and Bootstrap.",
+            "name": "Salud y belleza",
+            "description": "Una plantilla de salud y belleza profesional utilizando Angular y Bootstrap.",
             "price": 49.99,
             "technologies": ["Angular", "Bootstrap"],
-            "categories": ["Corporate", "Business"]
+            "categories": ["Salud y belleza"]
+        },
+        {
+            "name": "Fitness",
+            "description": "Una plantilla de sitio web de fitness interactiva utilizando Angular y Bootstrap.",
+            "price": 69.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Fitness"]
+        },
+        {
+            "name": "Restaurante",
+            "description": "Una plantilla de restaurante elegante y moderna utilizando Angular y Bootstrap.",
+            "price": 49.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Restaurante"]
+        },
+        {
+            "name": "Renta de servicios",
+            "description": "Una plantilla para la renta de servicios profesional utilizando Angular y Bootstrap.",
+            "price": 49.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Renta de servicios"]
+        },
+        {
+            "name": "Tienda en línea",
+            "description": "Una plantilla de tienda en línea completa utilizando Angular y Bootstrap.",
+            "price": 39.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Tienda en linea"]
+        },
+        {
+            "name": "Negocios",
+            "description": "Una plantilla de sitio web para negocios profesional utilizando Angular y Bootstrap.",
+            "price": 59.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Negocios"]
+        },
+        {
+            "name": "Entretenimiento",
+            "description": "Una plantilla de entretenimiento dinámica y atractiva utilizando Angular y Bootstrap.",
+            "price": 29.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Entretenimiento"]
+        },
+        {
+            "name": "Streaming",
+            "description": "Una plantilla de sitio web de streaming moderna y responsiva utilizando Angular y Bootstrap.",
+            "price": 49.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Streaming"]
+        },
+        {
+            "name": "Bienes inmuebles",
+            "description": "Una plantilla de bienes inmuebles profesional utilizando Angular y Bootstrap.",
+            "price": 49.99,
+            "technologies": ["Angular", "Bootstrap"],
+            "categories": ["Bienes inmuebles"]
         }
     ],
     "categories": [
@@ -112,7 +141,7 @@
             "name": "Streaming"
         },
         {
-            "name": "Vienes inmuebles"
+            "name": "Bienes inmuebles"
         }
     ],
     "technologies": [

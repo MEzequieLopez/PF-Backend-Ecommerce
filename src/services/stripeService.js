@@ -44,13 +44,13 @@ const paymentIntent = async (userId) => {
         quantity: 1,
       })),
       mode: 'payment',
-      success_url: `http://localhost:3001/payment/checkout-success?order_id=${order.id}&user_id=${userId}`,
-      cancel_url: `http://localhost:3001/checkout-cancel?order_id=${order.id}&user_id=${userId}`,
+      success_url: `http://localhost:3001/payment/checkout-success?order_id=${order.id}`,
+      cancel_url: `http://localhost:3001/checkout-cancel?order_id=${order.id}`,
     });
 
     order.stripe_session_id = session.id;
     await order.save();
-    return { status: 201, id: session.id, session_url: session.url };
+    return { status: 201, id: session.id, session_url: session.url, order: order.id };
   } catch (error) {
     return { status: 500, message: `Internal Server Error: ${error.message}` };
   }
