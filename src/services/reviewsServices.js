@@ -43,13 +43,12 @@ const postReviewServices = async (obj) => {
             throw new Error(`Plantilla con id ${obj.idTemplate} no encontrada`);
         }
         let objReview = {
-            idUser: obj.idUser,
             rating: obj.rating,
             content: obj.content,
-            idTemplate: obj.idTemplate
         };
-
+        
         let newReview = await Review.create(objReview);
+        await newReview.setUser(obj.idUser);
         return newReview;
     } catch (error) {
         console.error('Error:', error.message);
