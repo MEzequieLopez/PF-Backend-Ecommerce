@@ -136,7 +136,7 @@ const getProfile = async (req, res) => {
   };
 
   const updateProfile = async (req, res) => {
-    const {name, lastname, email } = req.body;
+    const {username, name, lastname, email } = req.body;
   
     try {
       const userId = req.userId;
@@ -148,7 +148,7 @@ const getProfile = async (req, res) => {
       
       await User.update(
         {
-        
+          username: username || req.user.username,
           name: name || req.user.name,
           lastname: lastname || req.user.lastname,
           email: email || req.user.email,

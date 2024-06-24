@@ -5,8 +5,8 @@ module.exports = (sequelize) => {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
-            allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            allowNull: false
         },
 
         // Payment_ID <-- del modelo entidad relacion. <== referencia a Order(id)
