@@ -1,17 +1,17 @@
-const { getReviewsDetailServices, getReviewsUserServices, postReviewServices} = require("../services/reviewsServices")
+const { getReviewsDetailServices, getReviewsUserServices, postReviewServices } = require("../services/reviewsServices")
 
 const getReviewsTemplate = async (req, res) => {
-    const templateId= req.query.templateId
+    const templateId = req.query.templateId
     console.log(templateId)
 
     try {
         const response = await getReviewsDetailServices(templateId)
-        
-        if(!response || Object.keys(response).length === 0 ){
-            res.status(404).send('No reviews found')
+
+        if (!response || Object.keys(response).length === 0) {
+            return res.status(404).send('No reviews found')
         }
-        
-        res.status(200).send(response)
+
+        return res.status(200).send(response)
 
     } catch (error) {
         console.error(error);
@@ -20,17 +20,17 @@ const getReviewsTemplate = async (req, res) => {
 }
 
 const getReviewsUser = async (req, res) => {
-    const userId= req.userId
+    const userId = req.userId
     console.log(userId)
 
     try {
         const response = await getReviewsUserServices(userId)
-        
-        if(!response || Object.keys(response).length === 0 ){
-            res.status(404).send('No user found')
+
+        if (!response || Object.keys(response).length === 0) {
+            return res.status(404).send('No user found')
         }
-        
-        res.status(200).send(response)
+
+        return res.status(200).send(response)
 
     } catch (error) {
         console.error(error);
@@ -38,10 +38,10 @@ const getReviewsUser = async (req, res) => {
     }
 }
 
-const postReview = async (req, res)=> {
-    const userId= req.userId
-    const templeId= req.body.templateId
-    const obj= req.body
+const postReview = async (req, res) => {
+    const userId = req.userId
+    const templeId = req.body.templateId
+    const obj = req.body
 
     console.log(userId)
     console.log(templeId)
@@ -50,12 +50,12 @@ const postReview = async (req, res)=> {
     try {
         let newReview = await postReviewServices(userId, templeId, obj);
 
-        res.status(200).send(newReview)
+        return res.status(200).send(newReview)
 
     } catch (error) {
         console.error(error);
-        res.status(404).send(error)
-        
+       return res.status(404).send(error)
+
     }
 
 }
