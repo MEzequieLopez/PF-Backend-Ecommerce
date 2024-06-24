@@ -22,7 +22,7 @@ const addItemToCart = async (req, res) => {
         }
         // Busca dentro de las ordenes la template que se añade por si ya la adquirio
         const orders = await Order.findAll({
-            where: { user_id, status: [ 'complete', 'pending' ] },
+            where: { user_id, status: [ 'completed', 'pending' ] },
             include: [ {
                 model: Template,
                 as: 'purchasedTemplates',
