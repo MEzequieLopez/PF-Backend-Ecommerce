@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
 
         user_id: {
             type: DataTypes.UUID,
-            allowNull: false
+            allowNull: false,
         },
 
         // id del template.
