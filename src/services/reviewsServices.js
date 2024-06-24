@@ -1,8 +1,35 @@
 const { Review, User, Template } = require('../db');
 
-const getReviewsServices = async ()=> {
-    return await Review.findAll()
+const getReviewsDetailServices = async (templateId)=> {
+
+    try {
+        const template = await Review.findAll({where: {templateId: templateId}})
+        if(!template){
+            console.log("Template not found");
+        return { error: "Template not found" };
+        }
+        return template
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw error;
+    }
+    
+} 
+const getReviewsUserServices = async (userId)=> {
+
+    try {
+        const user = await Review.findAll({where: {userId: userId}})
+        if(!user){
+            console.log("User not found");
+        return { error: "User not found" };
+        }
+        return user
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw error;
+    }
 }
+
 
 /*const postReviewServices = async (obj)=>{
     try {
@@ -25,30 +52,33 @@ const getReviewsServices = async ()=> {
 }
 */
 
-const postReviewServices = async (obj) => {
+const postReviewServices = async (userId, templeId, obj) => {
     try {
         
-        const requiredFields = ['idUser', 'rating', 'content', 'idTemplate'];
+        const requiredFields = ['rating', 'content'];
         for (const field of requiredFields) {
             if (!obj[field]) {
                 throw new Error(`Falta el campo obligatorio: ${field}`);
             }
         }
-        const user = await User.findByPk(obj.idUser);
+        const user = await User.findByPk(userId);
         if (!user) {
-            throw new Error(`Usuario con id ${obj.idUser} no encontrado`);
+            throw new Error(`Usuario con id ${userId} no encontrado`);
         }
-        const template = await Template.findByPk(obj.idTemplate);
+        const template = await Template.findByPk(templeId);
         if (!template) {
-            throw new Error(`Plantilla con id ${obj.idTemplate} no encontrada`);
+            throw new Error(`Plantilla con id ${templeId} no encontrada`);
         }
         let objReview = {
+            //idUser: obj.idUser,
             rating: obj.rating,
             content: obj.content,
+            //idTemplate: obj.idTemplate
         };
         
         let newReview = await Review.create(objReview);
-        await newReview.setUser(obj.idUser);
+        await newReview.setUser(userId);
+        await newReview.setTemplate(templeId);
         return newReview;
     } catch (error) {
         console.error('Error:', error.message);
@@ -56,7 +86,7 @@ const postReviewServices = async (obj) => {
     }
 };
 module.exports = {
-    getReviewsServices,
+    getReviewsDetailServices,
+    getReviewsUserServices,
     postReviewServices
-
  }

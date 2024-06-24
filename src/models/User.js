@@ -10,6 +10,13 @@ module.exports = (sequelize) => {
           primaryKey: true,
           allowNull: false,
         },
+        username: {
+          type: DataTypes.STRING,
+          allowNull: true,
+          validate: {
+            isAlphanumeric: true,
+          }
+        },
         name: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -26,6 +33,10 @@ module.exports = (sequelize) => {
         password: {
           type: DataTypes.STRING,
           allowNull: false,
+        },
+        image: {
+          type: DataTypes.STRING,
+          allowNull: true,
         },
 
         // deleted_at <-- soft-deletion <-- esto debe ser protegido para admins a nivel de ruta.
