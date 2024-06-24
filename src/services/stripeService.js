@@ -7,13 +7,13 @@ const paymentIntent = async (userId) => {
   try {
     const userCart = await Cart.findOne({
       where: { user_id: userId },
-      include: [{
+      include: [ {
         model: Template,
         as: 'inCart',
         through: {
           attributes: []
         }
-      }]
+      } ]
     });
 
     if (!userCart || userCart.inCart.length === 0) {
@@ -31,7 +31,7 @@ const paymentIntent = async (userId) => {
     }
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: [ 'card' ],
       line_items: userCart.inCart.map(item => ({
         price_data: {
           currency: 'usd',
@@ -44,8 +44,8 @@ const paymentIntent = async (userId) => {
         quantity: 1,
       })),
       mode: 'payment',
-      success_url: `http://localhost:3001/payment/checkout-success?order_id=${order.id}`,
-      cancel_url: `http://localhost:3001/checkout-cancel?order_id=${order.id}`,
+      success_url: `http://localhost:5173/paySuccess`,
+      cancel_url: `http://localhost:5173/payCancel`,
     });
 
     order.stripe_session_id = session.id;
@@ -61,13 +61,13 @@ const paymentSuccess = async (orderId, userId) => {
   try {
     let order = await Order.findByPk(orderId, {
       include: [ {
-          model: Template,
-          as: 'purchasedTemplates',
-          through: {
-              attributes: []
-          }
+        model: Template,
+        as: 'purchasedTemplates',
+        through: {
+          attributes: []
+        }
       } ]
-  });
+    });
     let cart = await Cart.findOne({ where: { user_id: userId } })
     if (cart) {
       // Eliminar el carrito después de que el pago sea exitoso
@@ -85,13 +85,13 @@ const paymentSuccess = async (orderId, userId) => {
 const paymentCanceled = async (orderId, userId) => {
   try {
     let order = await Order.findByPk(orderId, {
-      include: [{
+      include: [ {
         model: Template,
         as: 'purchasedTemplates',
         through: {
           attributes: []
         }
-      }]
+      } ]
     });
 
     if (!order) {
