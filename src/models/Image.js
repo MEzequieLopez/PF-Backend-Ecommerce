@@ -13,6 +13,14 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    isCover: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    set: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
 },
 {
   timestamps: false

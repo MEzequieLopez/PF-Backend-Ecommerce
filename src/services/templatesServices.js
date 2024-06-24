@@ -56,6 +56,9 @@ const getFilteredTemplates = async ({
         },
         {
           model: Image,
+          through: {
+            attributes: [], // Puedes especificar atributos específicos si es necesario
+          },
           where: image,
         },
       ],

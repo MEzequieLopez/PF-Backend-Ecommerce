@@ -7,7 +7,8 @@ const {
 } = require("../services/templatesServices");
 const data = require("../../Data.json");
 const { Category, Technology, Template, Image } = require("../db");
-const { buscarImagensEnCarpetas } = require("../utils/imageSearch");
+const { guardaImagenes } = require("../cloudinary/agregarImagen");
+
 
 const postTemplates = async (req, res) => {
   try {
@@ -27,12 +28,13 @@ const postTemplates = async (req, res) => {
       return res.status(200).json(newTemplate);
     }
   } catch (error) {
-  return  res.status(500).send("Error al crear plantilla.");
+    return res.status(500).send("Error al crear plantilla.");
   }
 };
 
 const getTemplates = async (req, res) => {
-  const { technology, category, sortBy, order, page, pageSize, image} = req.query;
+  const { technology, category, sortBy, order, page, pageSize, image } =
+    req.query;
   try {
     const templates = await getFilteredTemplates({
       image,
@@ -92,21 +94,21 @@ const loadDb = async (req, res) => {
   try {
     const categories = await Category.bulkCreate(data.categories);
     const technologies = await Technology.bulkCreate(data.technologies);
-    const responseUrls = await buscarImagensEnCarpetas(); // Asegúrate de que esta función devuelve un arreglo de URLs
-    
+
     for (const templateData of data.templates) {
       const template = await Template.create({
         name: templateData.name,
         description: templateData.description,
         price: templateData.price,
       });
-
+    
       const templateCategories = await Category.findAll({
         where: {
           name: templateData.categories,
         },
       });
-      await template.addCategories(templateCategories);
+      await template.addCategory(templateCategories);
+     
 
       const templateTechnologies = await Technology.findAll({
         where: {
@@ -114,42 +116,18 @@ const loadDb = async (req, res) => {
         },
       });
       await template.addTechnologies(templateTechnologies);
-
-      const responsee = await Template.findAll()
-      // Itera sobre las URLs obtenidas y actualiza las imágenes correspondientes
-      for (let j = 0; j < responsee.length && j < responseUrls.length; j++) {
-        const urlCopy = responseUrls[j].slice();
-        if (urlCopy) {
-          // console.log(urlCopy);
-
-          // Busca una imagen existente con el contenido de urlCopy
-          const existingImage = await Image.findOne({
-            where: {
-              content: urlCopy,
-            },
-          });
-          
-          console.log( existingImage);
-
-          if (existingImage) {
-            // Si la imagen existe, actualiza el template con la imagen existente
-            await template.addImage(existingImage.constent); // Asume que addImage acepta un objeto de imagen
-          } else {
-            // Si la imagen no existe, crea una nueva
-            const newImage = await Image.create({
-              content: urlCopy,
-            });
-            // console.log(newImage);
-            await template.addImage(newImage); // Asume que addImage acepta un objeto de imagen
-          }
-        }
-      }
+      await guardaImagenes(template, templateData)
+  
     }
+    // Asegúrate de que esta función devuelve un arreglo de URLs
+
+    res.status(200).json("se cargo con exito");
   } catch (error) {
-    console.error('Error al cargar la base de datos:', error);
-    res.status(500).send('Error al cargar la base de datos');
+    console.error("Error al cargar la base de datos:", error);
+    res.status(500).send("Error al cargar la base de datos");
   }
 };
+
 module.exports = {
   getTemplates,
   getTemplateById,
@@ -158,3 +136,22 @@ module.exports = {
   getCategories,
   postTemplates,
 };
+
+// Busca una imagen existente con el contenido de urlCopy
+
+// console.log( existingImage);
+
+// if (existingImage) {
+//   // Si la imagen existe, actualiza el template con la imagen existente
+//   await template.addImage(existingImage.constent); // Asume que addImage acepta un objeto de imagen
+
+// } else {
+//   // Si la imagen no existe, crea una nueva
+//   const newImage = await Image.create({
+//     content: urlCopy,
+//   });
+
+//   // console.log(newImage);
+//   await template.addImage(newImage);
+//   // Asume que addImage acepta un objeto de imagen
+// }
