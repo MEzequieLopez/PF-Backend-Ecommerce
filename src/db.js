@@ -113,7 +113,7 @@ Template.hasMany(ReportedTemplate, {foreignKey: 'template_id'});
 // one-to-one
 User.hasOne(Admin, {foreignKey: 'user_id'});
 Admin.belongsTo(User, {foreignKey: 'user_id'})
- */
+
 /**
  * Order.belongsTo(User, { foreignKey: 'user_id' });
 Order.belongsToMany(Template, { through: 'OrderTemplate' });
