@@ -1,4 +1,4 @@
-const { registerService, loginService, addNewFavorite, getAllFavorites, removeFavorite } = require('../services/usersServices');
+const { registerService, loginService, addNewFavorite, getAllFavorites, removeFavorite, userId } = require('../services/usersServices');
 
 const registerUser = async (req, res) => {
     const { email, lastname, name, image } = req.body;
@@ -74,11 +74,22 @@ const deleteFavorite = async (req, res) => {
         return res.status(500).send(error.message);
     }
 }
+
+const getUserById= async (req, res) => {
+    const { idUser } = req.params
+    try {
+        let user = await userId(idUser);
+        res.status(200).send(user);
+    } catch (error) {
+        res.status(404).send(error);
+    }
+}
 module.exports = {
     registerUser,
     loginUser,
     addFavorite,
     getFavorites,
-    deleteFavorite
+    deleteFavorite, 
+    getUserById
 }
 

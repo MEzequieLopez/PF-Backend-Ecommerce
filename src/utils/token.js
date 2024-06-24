@@ -7,6 +7,7 @@ module.exports = (user) => {
         name: user.name,
         lastename: user.lastename,
         id: user.id,
+        email:user.email
     }
     const token = jwt.sign(userForToken, SECRET)
     return token

@@ -100,40 +100,33 @@ const getAllTechnologies = async () => {
 
 const getTemplateId = async (id) => {
   try {
-    const response = await Template.findAll({
-      include: [
-        {
-          model: Technology,
-          through: {
+    let product= await Template.findByPk(id, {
+      
+      include: [{
+          model:Review,
+          as: "reviews"
+      },{
+        model: Technology,
+        through: {
             attributes: [],
-          },
-        },
-        {
-          model: Category,
-          through: {
-            attributes: [],
-          },
-        },
-        {
-          model: Image
+          }
+    },
+    {
+      model: Category,
+      through: {
+          attributes: [],
         }
-        // {
-        //     model: Review
-        // }
-      ],
-    });
-    const templateId = response.find(
-      (template) => template.id.toString() === id.toString()
-    );
-    return templateId;
+  },
+
+
+    ],
+  } )
+      return product;
   } catch (error) {
     console.error(error);
-    return {
-      error: "An error occurred while fetching the template.",
-      status: 500,
-    };
-  }
-};
+    return { error: 'An error occurred while fetching the template.', status: 500 };
+}
+}
 
 const searchTemplateByTechnology = async (req, res) => {
   const technologyName = req.query.technology;

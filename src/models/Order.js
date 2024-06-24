@@ -8,23 +8,33 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         // usuario al cual pertenece la orden
-        customer_id: {
+        user_id: {
             type: DataTypes.UUID,
             allowNull: false
         },
         // id del template que se va a comprar.
-        product_id: {
-            type: DataTypes.UUID,
-            allowNull: false
+        // product_id: {
+        //     type: DataTypes.UUID,
+        //     allowNull: false
+        // },
+        total_amount: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
         },
-
         // ? esto debe ir ?
-    //    order_date: {
-    //        type: DataTypes.DATE,
-    //        defaultValue: sequelize.NOW
-    //    },
-
-        // total_amount: ?
+        order_date: {
+            type: DataTypes.DATE,
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+        },
+        status: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: "pending"
+        },
+        stripe_session_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        }
 
     });
 };
