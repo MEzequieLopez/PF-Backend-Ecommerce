@@ -6,18 +6,15 @@ const guardaImagenes = async (template,  templateData) => {
       const responsee = await Category.findAll();
       const carpetasDetalle = data.carpetasDetalle;
       const carpetasPortada = data.carpetasPortada;
-    for (let t = 0; t <  responsee.length; t++) {
-        
-        
- 
-      for (let j = 0; j < templateData.categories.length; j++) {
+
+      
         // Obtiene las imágenes para la categoría actual
-        const allImagenes = await buscarImagensEnCarpetas(templateData.categories[j]);
-  
+        const allImagenes = await buscarImagensEnCarpetas(templateData.categories[0]);
         // Filtra las primeras 4 imágenes del array obtenido
         const firstFourImagenes = allImagenes.slice(0, 4);
-  
+        
         // Procesa las primeras 4 imágenes
+        for (let t = 0; t <  responsee.length; t++) {
         for (let i = 0; i < firstFourImagenes.length; i++) {
           const index = `${firstFourImagenes[i].categoryy}${i + 1}`;
           console.log(index);
@@ -35,6 +32,7 @@ const guardaImagenes = async (template,  templateData) => {
                 content: firstFourImagenes[i].url,
                 set: index,
                 isCover: firstFourImagenes[i].isCover,
+                category: templateData.categories[0]
               });
           
               await responsee[t].addImage(newImage);
@@ -51,7 +49,7 @@ const guardaImagenes = async (template,  templateData) => {
         // if (imagesProcessed >= 4) {
         //   break;
         // }
-      }
+      
     } catch (error) {
       console.error("Error guardando imágenes:", error);
     }

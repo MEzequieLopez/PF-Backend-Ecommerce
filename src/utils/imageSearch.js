@@ -4,36 +4,38 @@ const data = require("../../Data.json");
 async function buscarImagensEnCarpetas(categoria) {
   try {
     let resultados = [];
-
     for (const imageData of data.imagenes) {
       // Determina la carpeta basada en la categoría y si la imagen es cover
-      const carpeta = imageData.isCover
-        ? `${categoria}_Portada`
-        : `${categoria}_Detalle`;
-
+      const carpeta = imageData.isCover? `${categoria}_Portada` : `${categoria}_Detalle`;
+    console.log(imageData.content);
       try {
-        const resultado = await cloudinary.uploader.upload(imageData.content, {
-          folder: carpeta,
-        });
+        if(imageData.category === categoria){
+          const resultado = await cloudinary.uploader.upload(imageData.content, {folder: carpeta,});
+        
 
         resultados.push({
           url: resultado.secure_url,
-          categoryy: categoria,
+          categoryy: categoria, // 
           carpeta: resultado.asset_folder,
           isCover: imageData.isCover,
         });
 
+        // Agrega la categoría al arreglo de categorías procesadas
+      
+
+    
         if (resultados.length >= 4) {
-          continue; // Detiene la ejecución y sale del bucle
+          break; // 
         }
+
+        
+      }
       } catch (error) {
-        console.error(
-          `Error cargando imagen ${imageData.content} en la carpeta ${carpeta}:`,
-          error
-        );
+        console.error(`Error cargando imagen ${imageData.content} en la carpeta ${carpeta}:`, error);
       }
     }
     return resultados;
+  
   } catch (error) {
     console.error("Error buscando imágenes:", error);
   }
