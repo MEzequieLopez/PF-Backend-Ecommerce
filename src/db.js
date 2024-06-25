@@ -73,8 +73,7 @@ Category.belongsToMany(Template, { through: 'TemplateCategories' });
 User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 // relacion entre Image y Template (many-to-many)
-Template.belongsToMany(Image, {through: 'templateImages'});
-Image.belongsToMany(Template, {through: 'templateImages'});
+
 
 
 //Relacion entre Template y review 
