@@ -12,16 +12,16 @@ const { guardaImagenes } = require("../cloudinary/agregarImagen");
 
 const postTemplates = async (req, res) => {
   try {
-    const { name, description, price, image, technology, category } = req.body;
+    const { name, description, price, imagen, technology, category } = req.body;
 
-    if (!name || !description || !price || !image || !technology || !category) {
+    if (!name || !description || !price || !imagen || !technology || !category) {
       return res.status(400).json({ message: "Missing info" });
     } else {
       const newTemplate = await CreateTemplates(
         name,
         description,
         price,
-        image,
+        imagen,
         technology,
         category
       );
@@ -33,11 +33,11 @@ const postTemplates = async (req, res) => {
 };
 
 const getTemplates = async (req, res) => {
-  const { technology, category, sortBy, order, page, pageSize, image } =
+  const { technology, category, sortBy, order, page, pageSize, imagen } =
     req.query;
   try {
     const templates = await getFilteredTemplates({
-      image,
+      imagen,
       technology,
       category,
       sortBy,
@@ -65,7 +65,7 @@ const getTemplateById = async (req, res) => {
       return res.status(400).send("No encontrado");
     }
 
-    res.status(200).json(response);
+   return res.status(200).json(response);
   } catch (error) {
     console.error(error);
     res.status(500).send("Ha ocurrido un error.");

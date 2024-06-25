@@ -5,7 +5,7 @@ const CreateTemplates = async (
   name,
   description,
   price,
-  image,
+  imagen,
   technology,
   category,
 ) => {
@@ -13,7 +13,7 @@ const CreateTemplates = async (
     name,description,price
 });
 
-if(image) await newTemplate.addImage(image);
+if(imagen) await newTemplate.addImage(imagen);
 if(technology) await newTemplate.addTechnology(technology);
 if(category) await newTemplate.addCategory(category);
 
@@ -21,7 +21,7 @@ return newTemplate
 
 }
 const getFilteredTemplates = async ({
-  image,
+  imagen,
   technology,
   category,
   sortBy,
@@ -59,7 +59,7 @@ const getFilteredTemplates = async ({
           through: {
             attributes: [], // Puedes especificar atributos específicos si es necesario
           },
-          where: image,
+          where: imagen,
         },
       ],
       order: orderArray.length ? orderArray : undefined,
@@ -116,7 +116,10 @@ const getTemplateId = async (id) => {
       through: {
           attributes: [],
         }
-  },
+  },{model: Image,
+    through: {
+        attributes: [],
+      }}
 
 
     ],
