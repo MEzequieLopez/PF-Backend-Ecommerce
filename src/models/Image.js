@@ -2,19 +2,27 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   
-  sequelize.define('category', {
+  sequelize.define('image', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: {
+
+    content: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
-  },
-  {
-    timestamps: false
-  });
+    isCover: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    set: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+},
+{
+  timestamps: false
+});
 };

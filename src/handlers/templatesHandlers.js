@@ -1,95 +1,157 @@
-const { getFilteredTemplates, getTemplateId } = require("../services/templatesServices");
+const {
+  getFilteredTemplates,
+  getTemplateId,
+  getAllTechnologies,
+  getAllCategories,
+  CreateTemplates,
+} = require("../services/templatesServices");
 const data = require("../../Data.json");
-const { Category, Technology, Template } = require("../db");
+const { Category, Technology, Template, Image } = require("../db");
+const { guardaImagenes } = require("../cloudinary/agregarImagen");
+
+
+const postTemplates = async (req, res) => {
+  try {
+    const { name, description, price, image, technology, category } = req.body;
+
+    if (!name || !description || !price || !image || !technology || !category) {
+      return res.status(400).json({ message: "Missing info" });
+    } else {
+      const newTemplate = await CreateTemplates(
+        name,
+        description,
+        price,
+        image,
+        technology,
+        category
+      );
+      return res.status(200).json(newTemplate);
+    }
+  } catch (error) {
+    return res.status(500).send("Error al crear plantilla.");
+  }
+};
 
 const getTemplates = async (req, res) => {
-    const { technology, category, sortBy, order, page, pageSize } = req.query;
-
-    try {
-
-        const templates = await getFilteredTemplates({
-            technology,
-            category,
-            sortBy,
-            order,
-            page,
-            pageSize
-        });
-
-        if (templates.status === 404) {
-            return res.status(templates.status).json(templates.error);
-        }
-
-        return res.status(templates.status).json(templates.data);
-
-    } catch (error) {
-        
-        console.error(error);
-        return res.json(error);
+  const { technology, category, sortBy, order, page, pageSize, image } =
+    req.query;
+  try {
+    const templates = await getFilteredTemplates({
+      image,
+      technology,
+      category,
+      sortBy,
+      order,
+      page,
+      pageSize,
+    });
+    if (templates.status === 404) {
+      return res.status(templates.status).json(templates.error);
     }
-}
+
+    return res.status(templates.status).send(templates);
+  } catch (error) {
+    console.error(error);
+    return res.json(error);
+  }
+};
 
 const getTemplateById = async (req, res) => {
-    try {
-        const {id} = req.params;
-        const response = await getTemplateId(id)
+  try {
+    const { id } = req.params;
+    const response = await getTemplateId(id);
 
-        if(!response || Object.keys(data).length === 0){
-            return res.status(400).send('Not found')
-        } 
-
-        res.status(200).json(response)   
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('An error occurred while fetching the template.');
+    if (!response || Object.keys(data).length === 0) {
+      return res.status(400).send("No encontrado");
     }
 
-}
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Ha ocurrido un error.");
+  }
+};
 
+const getTechnologies = async (req, res) => {
+  try {
+    const response = await getAllTechnologies();
+    return res.status(200).json(response);
+  } catch (error) {
+    res.status(500).send("Ha ocurrido un error.");
+  }
+};
 
+const getCategories = async (req, res) => {
+  try {
+    const response = await getAllCategories();
+    return res.status(200).json(response);
+  } catch (error) {
+    res.status(500).send("Ha ocurrido un error.");
+  }
+};
 // funcion auxiliar par cargar la base de datos
 const loadDb = async (req, res) => {
-    try {
+  try {
+    const categories = await Category.bulkCreate(data.categories);
+    const technologies = await Technology.bulkCreate(data.technologies);
 
-        const categories = await Category.bulkCreate(data.categories);
+    for (const templateData of data.templates) {
+      const template = await Template.create({
+        name: templateData.name,
+        description: templateData.description,
+        price: templateData.price,
+      });
+    
+      const templateCategories = await Category.findAll({
+        where: {
+          name: templateData.categories,
+        },
+      });
+      await template.addCategory(templateCategories);
+     
 
-
-        const technologies = await Technology.bulkCreate(data.technologies);
-
-
-        for (const templateData of data.templates) {
-            const template = await Template.create({
-                name: templateData.name,
-                description: templateData.description,
-                price: templateData.price
-            });
-
-
-            const templateCategories = await Category.findAll({
-                where: {
-                    name: templateData.categories
-                }
-            });
-            await template.addCategories(templateCategories);
-
-
-            const templateTechnologies = await Technology.findAll({
-                where: {
-                    name: templateData.technologies
-                }
-            });
-            await template.addTechnologies(templateTechnologies);
-        }
-
-        res.status(200).send('Data loaded successfully!');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('An error occurred while loading the data.');
+      const templateTechnologies = await Technology.findAll({
+        where: {
+          name: templateData.technologies,
+        },
+      });
+      await template.addTechnologies(templateTechnologies);
+      await guardaImagenes(template, templateData)
+  
     }
-}
+    // Asegúrate de que esta función devuelve un arreglo de URLs
+
+    res.status(200).json("se cargo con exito");
+  } catch (error) {
+    console.error("Error al cargar la base de datos:", error);
+    res.status(500).send("Error al cargar la base de datos");
+  }
+};
+
 module.exports = {
-    getTemplates,
-    getTemplateById,
-    loadDb
-}
+  getTemplates,
+  getTemplateById,
+  loadDb,
+  getTechnologies,
+  getCategories,
+  postTemplates,
+};
+
+// Busca una imagen existente con el contenido de urlCopy
+
+// console.log( existingImage);
+
+// if (existingImage) {
+//   // Si la imagen existe, actualiza el template con la imagen existente
+//   await template.addImage(existingImage.constent); // Asume que addImage acepta un objeto de imagen
+
+// } else {
+//   // Si la imagen no existe, crea una nueva
+//   const newImage = await Image.create({
+//     content: urlCopy,
+//   });
+
+//   // console.log(newImage);
+//   await template.addImage(newImage);
+//   // Asume que addImage acepta un objeto de imagen
+// }
