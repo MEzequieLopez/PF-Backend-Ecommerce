@@ -116,7 +116,7 @@ const loadDb = async (req, res) => {
         },
       });
       await template.addTechnologies(templateTechnologies);
-      await guardaImagenes(template, templateData)
+      // await guardaImagenes(template, templateData)
   
     }
     // Asegúrate de que esta función devuelve un arreglo de URLs

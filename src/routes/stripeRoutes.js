@@ -6,5 +6,5 @@ const stripeRouter = require("express").Router();
 stripeRouter
     .post("/checkout-session", loginRequire, newPayment)
     .post("/checkout-success", loginRequire, success)
-    .get("/checkout-cancel", loginRequire, cancel)
+    .post("/checkout-cancel", loginRequire, cancel)
 module.exports = stripeRouter;
