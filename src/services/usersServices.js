@@ -4,7 +4,7 @@ const token = require('../utils/token');
 const sendMail = require('../utils/nodemailer');
 
 
-const registerService = async (email, lastname, name, userPassword) => {
+const registerService = async (email, lastname, name, userPassword, image) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(userPassword, salt);
