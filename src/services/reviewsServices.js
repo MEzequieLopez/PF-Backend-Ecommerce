@@ -4,6 +4,26 @@ const getReviewsServices = async ()=> {
     return await Review.findAll()
 }
 
+const getReviewsByTemplateIdServices = async (id)=>{
+    try {
+        const reviews = await Template.findOne({
+            
+            where: { id: id },
+            include: [{
+              model: Review,
+              as: 'reviews' 
+            }]
+          });
+
+          return reviews
+    } catch (error) {
+        console.error(error);
+        return { error: 'An error occurred while fetching the reviews.', status: 500 };
+    }
+}
+
+
+
 /*const postReviewServices = async (obj)=>{
     try {
         if(!obj.idUser || !obj.rating || !obj.content || !obj.idTemplate) throw 'Faltan datos obligatorios';
@@ -58,6 +78,7 @@ const postReviewServices = async (obj) => {
 };
 module.exports = {
     getReviewsServices,
+    getReviewsByTemplateIdServices,
     postReviewServices
 
  }
