@@ -119,11 +119,18 @@ const getTemplateId = async (id) => {
   },{model: Image,
     through: {
         attributes: [],
-      }}
+      },
+      attributes: ['original'],
+    },
+  ],
+});
 
-
-    ],
-  } )
+// Procesar las imágenes para incluir solo la propiedad original
+if (product && product.Images) {
+  product.Images = product.Images.map(image => ({
+    original: image.original,
+  }));
+}
       return product;
   } catch (error) {
     console.error(error);
