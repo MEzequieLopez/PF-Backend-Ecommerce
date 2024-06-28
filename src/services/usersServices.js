@@ -29,26 +29,38 @@ const registerService = async (email, lastname, name, userPassword, image) => {
     }
 };
 
-const loginService = async (email, userPassword) => {
-    try {
-        const user = await User.findOne({ where: { email } });
-        const passwordCorrect = user === null
-            ? false
-            : await bcrypt.compare(userPassword, user.password);
+const loginService = async (email, userPassword, firebaseToken) => {
+  try {
+      let user;
+      if (firebaseToken) {
+          const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+          const { uid, email } = decodedToken;
 
-        if (!(user && passwordCorrect)) {
-            return { status: 400, error: 'Email o contraseña inválidos.' };
-        }
+          user = await User.findOne({ where: { firebaseUid: uid } });
+          if (!user) {
+              
+              user = await User.create({ email, firebaseUid: uid });
+          }
+      } else {
+          
+          user = await User.findOne({ where: { email } });
+          const passwordCorrect = user === null
+              ? false
+              : await bcrypt.compare(userPassword, user.password);
 
-        const userToken = token(user);
-        const { password, ...userWithoutPassword } = user.get();
-        
-        return { status: 200, data: { token: userToken, userInfo: userWithoutPassword} };
+          if (!(user && passwordCorrect)) {
+              return { status: 400, error: 'Email o contraseña inválidos.' };
+          }
+      }
 
-    } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        return { status: 500, error: 'Error al procesar la solicitud de login.' };
-    }
+      const userToken = token(user);
+      const { password, ...userWithoutPassword } = user.get();
+      
+      return { status: 200, data: { token: userToken, userInfo: userWithoutPassword } };
+  } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      return { status: 500, error: 'Error al procesar la solicitud de login.' };
+  }
 };
 
 
