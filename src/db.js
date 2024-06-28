@@ -71,22 +71,26 @@ Template.belongsToMany(Image, {through: 'templateImages'});
 Image.belongsToMany(Template, {through: 'templateImages'});
 
 Template.hasMany(Review, {
-  foreignKey: 'templateId', 
+  //foreignKey: 'templateId',
+  foreignKey: 'idTemplate',
   as: 'reviews' 
 });
 
 Review.belongsTo(Template, {
-  foreignKey: 'templateId' 
+  //foreignKey: 'templateId' 
+  foreignKey: 'idTemplate',
 });
 
 
 User.hasMany(Review, {
-  foreignKey: 'userId', 
+  //foreignKey: 'userId', 
+  foreignKey: 'idUser', 
   as: 'reviews' 
 });
 
 Review.belongsTo(User, {
-  foreignKey: 'userId' 
+  //foreignKey: 'userId' 
+  foreignKey: 'idUser'
 });
 
 User.hasOne(Cart);

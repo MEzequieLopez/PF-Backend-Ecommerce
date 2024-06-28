@@ -101,7 +101,7 @@ const loadDb = async (req, res) => {
         description: templateData.description,
         price: templateData.price,
       });
-    
+    console.log(templateData.categories);
       const templateCategories = await Category.findAll({
         where: {
           name: templateData.categories,
@@ -116,8 +116,8 @@ const loadDb = async (req, res) => {
         },
       });
       await template.addTechnologies(templateTechnologies);
-      // await guardaImagenes(template, templateData)
-  
+      
+      await guardaImagenes(template, templateData)
     }
     // Asegúrate de que esta función devuelve un arreglo de URLs
 
@@ -137,21 +137,3 @@ module.exports = {
   postTemplates,
 };
 
-// Busca una imagen existente con el contenido de urlCopy
-
-// console.log( existingImage);
-
-// if (existingImage) {
-//   // Si la imagen existe, actualiza el template con la imagen existente
-//   await template.addImage(existingImage.constent); // Asume que addImage acepta un objeto de imagen
-
-// } else {
-//   // Si la imagen no existe, crea una nueva
-//   const newImage = await Image.create({
-//     content: urlCopy,
-//   });
-
-//   // console.log(newImage);
-//   await template.addImage(newImage);
-//   // Asume que addImage acepta un objeto de imagen
-// }

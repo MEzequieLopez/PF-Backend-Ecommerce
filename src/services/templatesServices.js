@@ -125,8 +125,9 @@ const getTemplateId = async (id) => {
 
       include: [ {
         model: Review,
-        as: "reviews"
-      }, {
+        as: 'reviews'
+      }, 
+      {
         model: Technology,
         through: {
           attributes: [],
@@ -137,17 +138,22 @@ const getTemplateId = async (id) => {
         through: {
           attributes: [],
         }
-      }, {
-        model: Image,
-        through: {
-          attributes: [],
-        }
-      }
+  },{model: Image,
+    through: {
+        attributes: [],
+      },
+      attributes: ['original'],
+    },
+  ],
+});
 
-
-      ],
-    })
-    return product;
+// Procesar las imágenes para incluir solo la propiedad original
+if (product && product.Images) {
+  product.Images = product.Images.map(image => ({
+    original: image.original,
+  }));
+}
+      return product;
   } catch (error) {
     console.error(error);
     return { error: 'An error occurred while fetching the template.', status: 500 };
