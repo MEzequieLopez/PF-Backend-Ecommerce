@@ -108,7 +108,7 @@ const postReview = async (req, res) => {
 };
 
 module.exports = {
-    getReviews,
+    
     getReviewsTemplate,
     getReviewsUser,
     postReview
