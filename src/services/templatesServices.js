@@ -104,8 +104,9 @@ const getTemplateId = async (id) => {
       
       include: [{
           model:Review,
-          as: "reviews"
-      },{
+          as: 'reviews'
+      },
+      {
         model: Technology,
         through: {
             attributes: [],
