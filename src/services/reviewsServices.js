@@ -56,7 +56,9 @@ const postReviewServices = async (userId, data) => {
             }
         }
         const user = await User.findByPk(userId);
+        const user = await User.findByPk(userId);
         if (!user) {
+            throw new Error(`Usuario con id ${userId} no encontrado`);
             throw new Error(`Usuario con id ${userId} no encontrado`);
         }
         const template = await Template.findByPk(data.idTemplate);
@@ -109,5 +111,4 @@ module.exports = {
     getReviewsByTemplateIdServices,
     getReviewsUserServices,
     postReviewServices
-
  }

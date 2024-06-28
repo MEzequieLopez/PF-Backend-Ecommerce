@@ -2,15 +2,37 @@ const { getReviewsServices, postReviewServices, getReviewsByTemplateIdServices, 
 
 const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 
-const getReviews = async (req, res) => {
+const getReviewsTemplate = async (req, res) => {
+    const templateId = req.query.templateId
+    console.log(templateId)
+
     try {
-        const response = await getReviewsServices()
-        
-        if(!response || Object.keys(response).length === 0 ){
-            res.status(404).send('No reviews found')
+        const response = await getReviewsDetailServices(templateId)
+
+        if (!response || Object.keys(response).length === 0) {
+            return res.status(404).send('No reviews found')
         }
-        
-        res.status(200).send(response)
+
+        return res.status(200).send(response)
+
+    } catch (error) {
+        console.error(error);
+        return res.json(error);
+    }
+}
+
+const getReviewsUser = async (req, res) => {
+    const userId = req.userId
+    console.log(userId)
+
+    try {
+        const response = await getReviewsUserServices(userId)
+
+        if (!response || Object.keys(response).length === 0) {
+            return res.status(404).send('No user found')
+        }
+
+        return res.status(200).send(response)
 
     } catch (error) {
         console.error(error);
