@@ -38,7 +38,10 @@ module.exports = (sequelize) => {
           type: DataTypes.STRING,
           allowNull: true,
         },
-
+        firebaseUid: {
+          type: DataTypes.STRING,
+          allowNull: true
+        },
         // deleted_at <-- soft-deletion <-- esto debe ser protegido para admins a nivel de ruta.
         deleted_at: {
           type: DataTypes.DATE,
