@@ -55,7 +55,7 @@ const postReviewServices = async (userId, data) => {
                 throw new Error(`Falta el campo obligatorio: ${field}`);
             }
         }
-        const user = await User.findByPk(userId);
+       
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error(`Usuario con id ${userId} no encontrado`);

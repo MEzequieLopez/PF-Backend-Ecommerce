@@ -2,7 +2,7 @@ const { getReviewsServices, postReviewServices, getReviewsByTemplateIdServices, 
 
 const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 
-const getReviewsTemplate = async (req, res) => {
+/*const getReviewsTemplate = async (req, res) => {
     const templateId = req.query.templateId
     console.log(templateId)
 
@@ -19,9 +19,9 @@ const getReviewsTemplate = async (req, res) => {
         console.error(error);
         return res.json(error);
     }
-}
+} */
 
-const getReviewsUser = async (req, res) => {
+/*const getReviewsUser = async (req, res) => {
     const userId = req.userId
     console.log(userId)
 
@@ -38,7 +38,7 @@ const getReviewsUser = async (req, res) => {
         console.error(error);
         return res.json(error);
     }
-}
+} */
 
 const getReviewsTemplate = async (req, res) => {
     const { id } = req.params;
