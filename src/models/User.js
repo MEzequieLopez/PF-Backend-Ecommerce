@@ -10,6 +10,13 @@ module.exports = (sequelize) => {
           primaryKey: true,
           allowNull: false,
         },
+        username: {
+          type: DataTypes.STRING,
+          allowNull: true,
+          validate: {
+            isAlphanumeric: true,
+          }
+        },
         name: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -27,6 +34,10 @@ module.exports = (sequelize) => {
           type: DataTypes.STRING,
           allowNull: false,
         },
+        imagen: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
 
         // deleted_at <-- soft-deletion <-- esto debe ser protegido para admins a nivel de ruta.
         deleted_at: {
@@ -35,6 +46,7 @@ module.exports = (sequelize) => {
           defaultValue: null
         },
       },
-      { freezeTableName: true, timestamps: false } // freezeTableName: false
+      { //freezeTableName: true, 
+        timestamps: false } // freezeTableName: false
     );
   };

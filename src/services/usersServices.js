@@ -4,7 +4,7 @@ const token = require('../utils/token');
 const sendMail = require('../utils/nodemailer');
 
 
-const registerService = async (email, lastname, name, userPassword) => {
+const registerService = async (email, lastname, name, userPassword, image) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(userPassword, salt);
@@ -136,7 +136,7 @@ const getProfile = async (req, res) => {
   };
 
   const updateProfile = async (req, res) => {
-    const {name, lastname, email } = req.body;
+    const {username, name, lastname, email } = req.body;
   
     try {
       const userId = req.userId;
@@ -148,7 +148,7 @@ const getProfile = async (req, res) => {
       
       await User.update(
         {
-        
+          username: username || req.user.username,
           name: name || req.user.name,
           lastname: lastname || req.user.lastname,
           email: email || req.user.email,

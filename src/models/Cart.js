@@ -8,19 +8,13 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         user_id: {
-            type: DataTypes.UUID, 
+            type: DataTypes.UUID,
             allowNull: false,
-            unique: true
-        },
-        template_id: {
-            type: DataTypes.UUID, 
-            allowNull: false //
         },
         total_amount: {
             type: DataTypes.FLOAT,
             allowNull: false,
             defaultValue: 0
         },
-        
     });
 };
