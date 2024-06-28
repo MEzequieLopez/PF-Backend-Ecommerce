@@ -9,11 +9,12 @@ module.exports = (sequelize) => {
         },
         user_id: {
             type: DataTypes.UUID, 
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         template_id: {
             type: DataTypes.UUID, 
-            allowNull: false
+            allowNull: false //
         },
         total_amount: {
             type: DataTypes.FLOAT,

@@ -81,8 +81,8 @@ User.hasMany(Order, { foreignKey: 'customer_id' });
 OrderPayment.belongsTo(Order, { foreignKey: 'order_id' });
 Order.hasMany(OrderPayment, { foreignKey: 'order_id' });
 
-OrderPayment.belongsTo(PaymentStatus, { foreignKey: 'payment_status_id' }); // es importante primero crear: Pending & Fulfilled en en la tabla PaymentStatus.
-PaymentStatus.hasMany(OrderPayment, { foreignKey: 'payment_status_id' });
+//OrderPayment.belongsTo(PaymentStatus, { foreignKey: 'payment_status_id' }); // es importante primero crear: Pending & Fulfilled en en la tabla PaymentStatus.
+//PaymentStatus.hasMany(OrderPayment, { foreignKey: 'payment_status_id' });
 
 OrderPayment.belongsToMany(Template, { through: 'OrderPaymentTemplate' });
 Template.belongsToMany(OrderPayment, { through: 'OrderPaymentTemplate' });
