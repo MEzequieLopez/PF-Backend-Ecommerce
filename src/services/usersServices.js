@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { User, Template } = require('../db');
+const { User, Template, Order } = require('../db');
 const token = require('../utils/token');
 const sendMail = require('../utils/nodemailer');
 const firebaseAdmin = require("../firebaseConfig/firebaseConfig")
@@ -36,7 +36,12 @@ const loginService = async (email, userPassword, firebaseToken) => {
       const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseToken);
       const { uid, email } = decodedToken;
 
-      user = await User.findOne({ where: { firebaseUid: uid } });
+      user = await User.findOne({
+        where: { firebaseUid: uid }, include: [ {
+          model: Order,
+          foreignKey: "user_id"
+        } ]
+      });
       if (!user) {
         console.log(decodedToken);
         user = await User.create(
@@ -44,14 +49,21 @@ const loginService = async (email, userPassword, firebaseToken) => {
             email,
             firebaseUid: uid,
             name: decodedToken.name.split(" ")[ 0 ],
-            lastname: decodedToken.name.split(" ")[ 2 ],
+            lastname: decodedToken.name.split(" ")[ 2 ] || decodedToken.name.split(" ")[ 1 ],
             imagen: decodedToken.picture
           }
         );
       }
     } else {
 
-      user = await User.findOne({ where: { email } });
+      user = await User.findOne({
+        where: { email },
+        include: [ {
+          model: Order,
+          foreignKey: "user_id"
+        } ]
+      });
+
       const passwordCorrect = user === null
         ? false
         : await bcrypt.compare(userPassword, user.password);
@@ -140,7 +152,13 @@ const getProfile = async (req, res) => {
 
     const userProfileData = await User.findOne({
       where: { id: userId },
-      attributes: { exclude: [ 'password' ] }
+      attributes: { exclude: [ 'password' ] },
+      include: [
+        {
+          model: Order,
+          foreignKey: 'user_id',
+        }
+      ]
     });
 
     if (!userProfileData) {
