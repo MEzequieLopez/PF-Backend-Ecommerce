@@ -24,7 +24,6 @@ const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 /*const getReviewsUser = async (req, res) => {
     const userId = req.userId
     console.log(userId)
-
     try {
         const response = await getReviewsUserServices(userId)
 

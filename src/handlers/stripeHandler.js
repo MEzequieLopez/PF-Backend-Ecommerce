@@ -12,22 +12,22 @@ const newPayment = async (req, res) => {
 }
 const success = async (req, res) => {
   const orderId = req.query.order_id;
-  const userId = req.query.user_id;
+  const userId = req.userId
   try {
     const response = await paymentSuccess(orderId, userId);
-    res.send(response)
+    return res.send(response)
   } catch (error) {
-    res.status(500).send({ error: error.message });
+    return res.status(500).send({ error: error.message });
   }
 }
 const cancel = async (req, res) => {
   const orderId = req.query.order_id;
-  const userId = req.query.user_id;
+  const userId = req.userId
   try {
     const response = await paymentCanceled(orderId, userId)
-    res.send(response)
+    return res.send(response)
   } catch (error) {
-    res.status(500).send({ error: error.message });
+    return res.status(500).send({ error: error.message });
   }
 }
 module.exports = {
