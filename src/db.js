@@ -49,6 +49,11 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
   OrderPayment, PaymentStatus, ReportedTemplate, Admin
 } = sequelize.models;
 
+// Define associations
+// Category.hasMany(Template);
+// Template.belongsTo(Category);
+Template.belongsToMany(Image, { through: "TemplateImages" });
+Image.belongsToMany(Template, { through: "TemplateImages" });
 
 Category.belongsToMany(Image, {through: 'CategoriImages'});
 Image.belongsToMany(Category, {through: 'CategoriImages'});
@@ -65,6 +70,8 @@ Template.belongsToMany(Category, { through: 'TemplateCategories' });
 Category.belongsToMany(Template, { through: 'TemplateCategories' });
 
 User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
+
+Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 // relacion entre Image y Template (many-to-many)
 Template.belongsToMany(Image, {through: 'templateImages'});
