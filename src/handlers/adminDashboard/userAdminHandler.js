@@ -256,13 +256,13 @@ const createAdminUser = async (req, res) => {
 const viewAllOrders = async (req, res) => {
     try {
         const allOrders = await OrderPayment.findAll({
-            // la relacion ha sido comentado porque falta arreglarlas en db.js
-           // include: [
-           //     {
-           //         model: User,
-           //         attributes: ['id', 'name', 'lastname' , 'email'] 
-           //     }
-         //   ]
+           //  la relacion ha sido comentado porque falta arreglarlas en db.js
+            include: [
+                {
+                    model: User,
+                    attributes: ['id', 'name', 'lastname' , 'email'] 
+                }
+            ]
         });
 
         if (allOrders.length === 0) {
