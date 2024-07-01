@@ -19,7 +19,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 // Middleware para parsear JSON
 app.use(bodyParser.json());
-app.use(debugMiddleware);
+// app.use(debugMiddleware);
 
 // Rutas
 app.use('/', routes);
