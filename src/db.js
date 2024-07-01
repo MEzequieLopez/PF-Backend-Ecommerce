@@ -11,13 +11,13 @@ const sequelize = new Sequelize({
   password: `${DB_PASSWORD}`,
   host: `${DB_HOST}`,
   dialect: "postgres",
-
-  /*dialectOptions: {
+  protocol: 'postgres',
+  dialectOptions: {
     ssl: {
-      require: true, 
-      rejectUnauthorized: false 
+      require: true,
+      rejectUnauthorized: false
     }
-  }, */
+  },
   logging: false,
 });
 
@@ -39,8 +39,8 @@ fs.readdirSync(path.join(__dirname, "/models"))
 modelDefiners.forEach((model) => model(sequelize));
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [
-  entry[0][0].toUpperCase() + entry[0].slice(1),
-  entry[1],
+  entry[ 0 ][ 0 ].toUpperCase() + entry[ 0 ].slice(1),
+  entry[ 1 ],
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
@@ -55,8 +55,8 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
 Template.belongsToMany(Image, { through: "TemplateImages" });
 Image.belongsToMany(Template, { through: "TemplateImages" });
 
-Category.belongsToMany(Image, {through: 'CategoriImages'});
-Image.belongsToMany(Category, {through: 'CategoriImages'});
+Category.belongsToMany(Image, { through: 'CategoriImages' });
+Image.belongsToMany(Category, { through: 'CategoriImages' });
 
 Image.belongsTo(User, { through: "userImage" });
 User.belongsTo(Image, { through: "userImage" });
@@ -64,7 +64,7 @@ User.belongsTo(Image, { through: "userImage" });
 Technology.belongsToMany(Category, { through: "TechnologyCategories" });
 Category.belongsToMany(Technology, { through: "TechnologyCategories" });
 
-Template.belongsToMany(User, { through: 'userFavorites', as:"Users" });
+Template.belongsToMany(User, { through: 'userFavorites', as: "Users" });
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Template.belongsToMany(Category, { through: 'TemplateCategories' });
 Category.belongsToMany(Template, { through: 'TemplateCategories' });
@@ -74,13 +74,13 @@ User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 // relacion entre Image y Template (many-to-many)
-Template.belongsToMany(Image, {through: 'templateImages'});
-Image.belongsToMany(Template, {through: 'templateImages'});
+Template.belongsToMany(Image, { through: 'templateImages' });
+Image.belongsToMany(Template, { through: 'templateImages' });
 
 Template.hasMany(Review, {
   //foreignKey: 'templateId',
   foreignKey: 'idTemplate',
-  as: 'reviews' 
+  as: 'reviews'
 });
 
 Review.belongsTo(Template, {
@@ -91,8 +91,8 @@ Review.belongsTo(Template, {
 
 User.hasMany(Review, {
   //foreignKey: 'userId', 
-  foreignKey: 'idUser', 
-  as: 'reviews' 
+  foreignKey: 'idUser',
+  as: 'reviews'
 });
 
 Review.belongsTo(User, {
@@ -106,7 +106,7 @@ Cart.belongsTo(User);
 User.hasMany(Order, { foreignKey: 'user_id' });
 Order.belongsTo(User, { foreignKey: 'user_id' });
 
-Cart.belongsToMany(Template, { through: 'CartTemplates', as: "inCart"});
+Cart.belongsToMany(Template, { through: 'CartTemplates', as: "inCart" });
 Template.belongsToMany(Cart, { through: 'CartTemplates', as: "toCart" });
 
 Order.belongsToMany(Template, { through: 'OrderTemplates', as: 'purchasedTemplates' });
