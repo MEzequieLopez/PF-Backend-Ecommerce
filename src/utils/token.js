@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
-const { SECRET } = process.env
-
+//const { SECRET } = process.env
+const SECRET = process.env.SECRET
 
 module.exports = (user) => {
     const userForToken = {

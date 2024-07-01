@@ -35,6 +35,7 @@ const postTemplates = async (req, res) => {
 const getTemplates = async (req, res) => {
   const { technology, category, sortBy, order, page, pageSize, imagen } =
     req.query;
+  
   try {
     const templates = await getFilteredTemplates({
       imagen,
