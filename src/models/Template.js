@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true // debe ser unico
+      // unique: true // debe ser unico
     },
     description: {
       type: DataTypes.STRING,
@@ -21,9 +21,9 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
       allowNull: false,  
     },
-    image:{ type: DataTypes.STRING,
-      allowNull: false,
-    },
+    // imagen:{ type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
     
     
     // deleted_at: {aqui se puede incluir soft-deletion} o paranoid: true
