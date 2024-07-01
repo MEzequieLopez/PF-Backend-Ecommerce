@@ -20,11 +20,7 @@ module.exports = (sequelize) => {
     price: {
       type: DataTypes.FLOAT,
       allowNull: false,  
-    },
-    image:{ type: DataTypes.STRING,
-      allowNull: false,
-    },
-    
+    }, 
     
     // deleted_at: {aqui se puede incluir soft-deletion} o paranoid: true
     deleted_at: {
