@@ -68,25 +68,14 @@ const paymentSuccess = async (orderId, userId) => {
         }
       } ]
     });
-
-    const cart = await Cart.findOne({
-      where: { user_id: userId },
-      include: [ {
-        model: Template,
-        as: 'inCart',
-        through: {
-          attributes: []
-        }
-      } ]
-    });
-
+    let cart = await Cart.findOne({ where: { user_id: userId } })
     if (cart) {
       // Eliminar el carrito después de que el pago sea exitoso
       await cart.destroy();
     }
-
     order.status = 'completed';
     await order.save();
+
     return { status: 200, message: 'Pago realizado, el carrito fue eliminado', data: order };
   } catch (error) {
     return { status: 500, message: error.message };
@@ -104,6 +93,7 @@ const paymentCanceled = async (orderId, userId) => {
         }
       } ]
     });
+
     if (!order) {
       return { status: 404, message: 'Orden no encontrada' };
     }

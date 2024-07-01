@@ -15,10 +15,9 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-    const { email, password: userPassword, firebaseToken } = req.body;
-    
+    const { email, password: userPassword } = req.body;
     try {
-        const response = await loginService(email, userPassword, firebaseToken);
+        const response = await loginService(email, userPassword);
         if (response.error) {
             return res.status(response.status).send(response.error);
         }

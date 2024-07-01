@@ -1,42 +1,48 @@
 const { Review, User, Template } = require('../db');
 
-const getReviewsServices = async ()=> {
-    return await Review.findAll()
-}
+const getReviewsDetailServices = async (templateId)=> {
 
-const getReviewsByTemplateIdServices = async (id)=>{
     try {
-        const reviews = await Template.findOne({
-            
-            where: { id: id },
-            include: [{
-              model: Review,
-              as: 'reviews',
-              
-            }]
-          });
-
-          return reviews
+        const template = await Review.findAll({where: {templateId: templateId}})
+        if(!template){
+            console.log("Template not found");
+        return { error: "Template not found" };
+        }
+        return template
     } catch (error) {
-        console.error(error);
-        return { error: 'An error occurred while fetching the reviews.', status: 500 };
+        console.error('Error:', error.message);
+        throw error;
+    }
+    
+} 
+const getReviewsUserServices = async (userId)=> {
+
+    try {
+        const user = await Review.findAll({where: {userId: userId}})
+        if(!user){
+            console.log("User not found");
+        return { error: "User not found" };
+        }
+        return user
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw error;
     }
 }
 
 
-
-/*const postReviewServices = async (data)=>{
+/*const postReviewServices = async (obj)=>{
     try {
-        if(!data.id || !data.rating || !data.content || !data.idTemplate) throw 'Faltan datos obligatorios';
+        if(!obj.idUser || !obj.rating || !obj.content || !obj.idTemplate) throw 'Faltan datos obligatorios';
         else{
-            let dataReview= {
-                id:data.id,
-                rating:data.rating,
-                content:data.content,
+            let objReview= {
+                idUser:obj.idUser,
+                rating:obj.rating,
+                content:obj.content,
                 
-                idTemplate:data.idTemplate
+                idTemplate:obj.idTemplate
             }
-            let newReview = await Review.create(dataReview);
+            let newReview = await Review.create(objReview);
             return newReview;
         }
     } catch (error) {
@@ -46,69 +52,41 @@ const getReviewsByTemplateIdServices = async (id)=>{
 }
 */
 
-const postReviewServices = async (userId, data) => {
+const postReviewServices = async (userId, templeId, obj) => {
     try {
         
-        const requiredFields = ['rating', 'content', 'idTemplate'];
+        const requiredFields = ['rating', 'content'];
         for (const field of requiredFields) {
-            if (!data[field]) {
+            if (!obj[field]) {
                 throw new Error(`Falta el campo obligatorio: ${field}`);
             }
         }
-       
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error(`Usuario con id ${userId} no encontrado`);
-            throw new Error(`Usuario con id ${userId} no encontrado`);
         }
-        const template = await Template.findByPk(data.idTemplate);
+        const template = await Template.findByPk(templeId);
         if (!template) {
-            throw new Error(`Plantilla con id ${data.idTemplate} no encontrada`);
+            throw new Error(`Plantilla con id ${templeId} no encontrada`);
         }
-        let dataReview = {
-            idUser: userId,
-            rating: data.rating,
-            content: data.content,
-            idTemplate: data.idTemplate
+        let objReview = {
+            //idUser: obj.idUser,
+            rating: obj.rating,
+            content: obj.content,
+            //idTemplate: obj.idTemplate
         };
-
-        let newReview = await Review.create(dataReview);
+        
+        let newReview = await Review.create(objReview);
+        await newReview.setUser(userId);
+        await newReview.setTemplate(templeId);
         return newReview;
     } catch (error) {
         console.error('Error:', error.message);
         throw error; 
     }
 };
-
-
-const getReviewsUserServices = async (idUser) => {
-    if (!idUser) {
-      throw new Error('User ID is required');
-    }
-    console.log('ID recibido en el servicio:', idUser);
-    const user = await User.findOne({
-        where: { id: idUser },
-        include: {
-        model: Review,
-        as: 'reviews',
-        //through: {
-        //    attributes: []
-        //}
-      }
-    });  
-    console.log(user)
-    if (!user) {
-      throw new Error('User not found');
-    }
-  
-    return user;
-  };
-  
-
-
 module.exports = {
-    getReviewsServices,
-    getReviewsByTemplateIdServices,
+    getReviewsDetailServices,
     getReviewsUserServices,
     postReviewServices
  }

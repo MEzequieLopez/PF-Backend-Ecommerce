@@ -1,15 +1,11 @@
-const { postReview, getReviewsTemplate, getReviewsUser } = require("../handlers/reviewsHandlers");
-const reviewsRouter = require("express").Router();
+const { getReviewsUser, getReviewsTemplate, postReview } = require("../handlers/reviewsHandlers");
 const loginRequire = require("../middlewares/loginRequire");
+const reviewsRouter = require("express").Router();
 
 reviewsRouter
-    //.get("/all", getReviews)
-    
-    .get("/:id", getReviewsTemplate)
-    .post("/",  loginRequire, postReview)
-    .get('/', loginRequire, getReviewsUser)
-    
-   
-    
+    .get("/template", getReviewsTemplate)
+    .get("/", loginRequire, getReviewsUser)
+    .post("/", loginRequire, postReview)
+
 
 module.exports = reviewsRouter;

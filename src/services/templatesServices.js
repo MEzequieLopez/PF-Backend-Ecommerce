@@ -10,14 +10,14 @@ const CreateTemplates = async (
   category,
 ) => {
   const newTemplate = await Template.create({
-    name, description, price
-  });
+    name,description,price
+});
 
-  if (imagen) await newTemplate.addImage(imagen);
-  if (technology) await newTemplate.addTechnology(technology);
-  if (category) await newTemplate.addCategory(category);
+if(imagen) await newTemplate.addImage(imagen);
+if(technology) await newTemplate.addTechnology(technology);
+if(category) await newTemplate.addCategory(category);
 
-  return newTemplate
+return newTemplate
 
 }
 const getFilteredTemplates = async ({
@@ -35,31 +35,13 @@ const getFilteredTemplates = async ({
   try {
     const orderArray = [];
     if (sortBy && order) {
-      orderArray.push([ sortBy, order.toUpperCase() ]);
+      orderArray.push([sortBy, order.toUpperCase()]);
     }
 
-    const limit = pageSize ? parseInt(pageSize) : 5; // Valor predeterminado de 5 si no se especifica
-    const offset = page ? (parseInt(page) - 1) * limit : 0;
+    const limit = pageSize ? parseInt(pageSize) : null;
+    const offset = page ? (parseInt(page) - 1) * (limit || 0) : null;
 
-    // Contar el total de plantillas con los filtros aplicados
-    const totalCount = await Template.count({
-      where: {
-        // Aplica los filtros según corresponda
-        ...technologyFilter,
-        ...categoryFilter,
-      },
-      include: [
-        {
-          model: Image,
-          through: {
-            attributes: [],
-          },
-          where: imagen,
-        },
-      ],
-    });
-
-
+    const totalCount = await Template.count();
     const templates = await Template.findAll({
       include: [
         {
@@ -84,13 +66,11 @@ const getFilteredTemplates = async ({
       limit: limit !== null ? limit : undefined,
       offset: offset !== null ? offset : undefined,
     });
-
     const totalPages = Math.ceil(totalCount / limit);
     if (!templates.length) {
       return { error: "No hay plantillas con esa etiqueta", status: 404 };
     }
-
-    return { data: templates, totalPages: totalPages === 0 ? 1 : totalPages, status: 200 };
+    return { data: templates, totalPages: totalPages, status: 200 };
   } catch (error) {
     console.error(error);
     return {
@@ -99,7 +79,6 @@ const getFilteredTemplates = async ({
     };
   }
 };
-
 
 const getAllCategories = async () => {
   try {
@@ -121,21 +100,20 @@ const getAllTechnologies = async () => {
 
 const getTemplateId = async (id) => {
   try {
-    let product = await Template.findByPk(id, {
-
-      include: [ {
-        model: Review,
-        as: 'reviews'
-      }, 
-      {
+    let product= await Template.findByPk(id, {
+      
+      include: [{
+          model:Review,
+          as: "reviews"
+      },{
         model: Technology,
         through: {
-          attributes: [],
-        }
-      },
-      {
-        model: Category,
-        through: {
+            attributes: [],
+          }
+    },
+    {
+      model: Category,
+      through: {
           attributes: [],
         }
   },{model: Image,
@@ -157,7 +135,7 @@ if (product && product.Images) {
   } catch (error) {
     console.error(error);
     return { error: 'An error occurred while fetching the template.', status: 500 };
-  }
+}
 }
 
 const searchTemplateByTechnology = async (req, res) => {
@@ -168,7 +146,7 @@ const searchTemplateByTechnology = async (req, res) => {
     const technologies = await Technology.findAll({
       where: {
         name: {
-          [ Op.iLike ]: `%${technologyName}%`, // Utiliza ILIKE para búsqueda por coincidencia parcial
+          [Op.iLike]: `%${technologyName}%`, // Utiliza ILIKE para búsqueda por coincidencia parcial
         },
       },
       include: [

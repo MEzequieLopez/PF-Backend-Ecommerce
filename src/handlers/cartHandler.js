@@ -1,6 +1,6 @@
 const { getFilteredTemplates, getTemplateId } = require("../services/templatesServices");
 const data = require("../../Data.json");
-const { Category, Technology, Template, Cart, Order, Image } = require("../db");
+const { Category, Technology, Template, Cart, Order } = require("../db");
 
 // TODOS ESTAS RUTAS DEBEN UTILIZAR EL MIDDLEWARE DE AUTHENTICATION.
 
@@ -14,41 +14,21 @@ const addItemToCart = async (req, res) => {
     try {
 
         let cart = await Cart.findOne({ where: { user_id } });
-        let template = await Template.findByPk(template_id,
-            {
-                include: [
-                    {
-                        model: Image,
-                        through: {
-                            attributes: [],
-                        },
+        let template = await Template.findByPk(template_id);
 
-                    },
-                ]
-            });
         if (!cart) {
             // Crea un carrito nuevo, no es necesario almacenar template_id
             cart = await Cart.create({ user_id });
         }
         // Busca dentro de las ordenes la template que se añade por si ya la adquirio
         const orders = await Order.findAll({
-            where: { user_id, status: [ 'completed', 'pending' ] },
+            where: { user_id, status: [ 'complete', 'pending' ] },
             include: [ {
                 model: Template,
                 as: 'purchasedTemplates',
-                where: { id: template_id },
-                include: [
-                    {
-                        model: Image,
-                        through: {
-                            attributes: [],
-                        },
-
-                    },
-                ]
+                where: { id: template_id }
             } ]
         });
-        console.log(orders);
 
         if (orders.length) {
             // si encuentra que la plantilla esta dentro de las ordenes ya sea pagada o pendiente de pago
@@ -86,7 +66,6 @@ const addItemToCart = async (req, res) => {
         await cart.save();
         return res.send({ status: 201, message: "Plantilla añadida al carrito", data: cartWithTemplates });
     } catch (error) {
-        console.log(error);
         return res.status(500).json(`Internal Server Error: ${error}`);
     }
 };
@@ -174,15 +153,7 @@ const viewCart = async (req, res) => {
                 as: 'inCart',
                 through: {
                     attributes: []
-                },
-                include: [
-                    {
-                        model: Image,
-                        through: {
-                            attributes: []
-                        },
-                    }
-                ]
+                }
             } ]
         });
 
