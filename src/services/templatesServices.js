@@ -162,8 +162,7 @@ if (product && product.Images) {
 
 const searchTemplateByTechnology = async (req, res) => {
   const technologyName = req.query.technology;
-  console.log("Searching for technology:", technologyName);
-
+  
   try {
     const technologies = await Technology.findAll({
       where: {

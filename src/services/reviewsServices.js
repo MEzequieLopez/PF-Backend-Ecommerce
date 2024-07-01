@@ -59,7 +59,6 @@ const postReviewServices = async (userId, data) => {
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error(`Usuario con id ${userId} no encontrado`);
-            throw new Error(`Usuario con id ${userId} no encontrado`);
         }
         const template = await Template.findByPk(data.idTemplate);
         if (!template) {
@@ -85,7 +84,7 @@ const getReviewsUserServices = async (idUser) => {
     if (!idUser) {
       throw new Error('User ID is required');
     }
-    console.log('ID recibido en el servicio:', idUser);
+    
     const user = await User.findOne({
         where: { id: idUser },
         include: {
