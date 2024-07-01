@@ -4,6 +4,7 @@ const reviewsRouter = require("./reviewsRoutes");
 const stripeRouter = require("./stripeRoutes");
 const cartRouter = require("./cartRoutes");
 const adminTemplatesRouter = require("./adminTemplatesRoutes"); 
+const adminUserRouter = require('./adminUserRoutes');
 
 const router = require("express").Router();
 
@@ -13,6 +14,7 @@ router
   .use("/reviews", reviewsRouter)
   .use("/payment", stripeRouter)
   .use("/cart", cartRouter)
+.use('/admin/user', adminUserRouter)
   .use("/admin/templates", adminTemplatesRouter); 
 
 module.exports = router;
