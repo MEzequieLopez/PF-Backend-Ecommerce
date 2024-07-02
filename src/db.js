@@ -12,12 +12,12 @@ const sequelize = new Sequelize({
   host: `${DB_HOST}`,
   dialect: "postgres",
   protocol: 'postgres',
-  dialectOptions: {
+ /*  dialectOptions: {
     ssl: {
       require: true,
       rejectUnauthorized: false
     }
-  },
+  }, */
   logging: false,
 });
 
