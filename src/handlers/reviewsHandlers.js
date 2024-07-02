@@ -22,7 +22,7 @@ const getReviewsTemplate = async (req, res) => {
 const getReviewsUser = async (req, res) => {
 
   const  idUser  = req.userId
-      console.log('ID recibido en el controlador:', idUser);
+      
 
     try {
       

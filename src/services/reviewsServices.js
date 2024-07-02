@@ -73,7 +73,7 @@ const getReviewsUserServices = async (idUser) => {
     if (!idUser) {
       throw new Error('User ID is required');
     }
-    console.log('ID recibido en el servicio:', idUser);
+    
     const user = await User.findOne({
         where: { id: idUser },
         include: {

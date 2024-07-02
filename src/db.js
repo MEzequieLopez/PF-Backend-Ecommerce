@@ -3,7 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { image } = require("./cloudinary");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_URL } = process.env;
 
 const sequelize = new Sequelize({
   database: `${DB_NAME}`,
@@ -12,12 +12,12 @@ const sequelize = new Sequelize({
   host: `${DB_HOST}`,
   dialect: "postgres",
   protocol: 'postgres',
-  /*dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  },*/
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false
+  //   }
+  // },
   logging: false,
 });
 
@@ -49,9 +49,7 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
   OrderPayment, PaymentStatus, ReportedTemplate, Admin
 } = sequelize.models;
 
-// Define associations
-// Category.hasMany(Template);
-// Template.belongsTo(Category);
+
 Template.belongsToMany(Image, { through: "TemplateImages" });
 Image.belongsToMany(Template, { through: "TemplateImages" });
 
@@ -73,7 +71,6 @@ User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
-
 
 Template.hasMany(Review, {
   //foreignKey: 'templateId',
