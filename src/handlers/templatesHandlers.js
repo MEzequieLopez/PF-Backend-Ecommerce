@@ -7,7 +7,7 @@ const {
 const data = require("../../Data.json");
 const { Category, Technology, Template, Image } = require("../db");
 const { CreateTemplates } = require("../services/adminTemplatesServices");
-// const { guardaImagenes } = require("../cloudinary/agregarImagen");
+ const { guardaImagenes } = require("../cloudinary/agregarImagen");
 // const { CreateTemplates } = require("../services/adminTemplates");
 
 const postTemplates = async (req, res) => {

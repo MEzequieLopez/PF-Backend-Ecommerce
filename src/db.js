@@ -12,12 +12,12 @@ const sequelize = new Sequelize({
   host: `${DB_HOST}`,
   dialect: "postgres",
   protocol: 'postgres',
-  dialectOptions: {
+  /*dialectOptions: {
     ssl: {
       require: true,
       rejectUnauthorized: false
     }
-  },
+  },*/
   logging: false,
 });
 
@@ -73,9 +73,7 @@ User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
-// relacion entre Image y Template (many-to-many)
-Template.belongsToMany(Image, { through: 'templateImages' });
-Image.belongsToMany(Template, { through: 'templateImages' });
+
 
 Template.hasMany(Review, {
   //foreignKey: 'templateId',
