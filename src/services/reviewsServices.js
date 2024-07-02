@@ -27,6 +27,16 @@ const getReviewsByTemplateIdServices = async (id)=>{
 const postReviewServices = async (userId, data) => {
     try {
         
+        const existingReview = await Review.findOne({
+            where: {
+                idUser: userId,
+                idTemplate: data.idTemplate
+            }
+        });
+
+        if (existingReview) {
+            throw new Error(`El usuario ya ha dejado una opinión para esta plantilla`);
+        }
         const requiredFields = ['rating', 'content', 'idTemplate'];
         for (const field of requiredFields) {
             if (!data[field]) {
@@ -37,7 +47,7 @@ const postReviewServices = async (userId, data) => {
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error(`Usuario con id ${userId} no encontrado`);
-            throw new Error(`Usuario con id ${userId} no encontrado`);
+            
         }
         const template = await Template.findByPk(data.idTemplate);
         if (!template) {
