@@ -1,25 +1,6 @@
 const { Category, Technology, Template, Review, Image } = require("../db");
 const { Sequelize, Op } = require("sequelize");
 
-const CreateTemplates = async (
-  name,
-  description,
-  price,
-  imagen,
-  technology,
-  category,
-) => {
-  const newTemplate = await Template.create({
-    name,description,price
-});
-
-if(imagen) await newTemplate.addImage(imagen);
-if(technology) await newTemplate.addTechnology(technology);
-if(category) await newTemplate.addCategory(category);
-
-return newTemplate
-
-}
 const getFilteredTemplates = async ({
   imagen,
   technology,
@@ -100,43 +81,49 @@ const getAllTechnologies = async () => {
 
 const getTemplateId = async (id) => {
   try {
-    let product= await Template.findByPk(id, {
-      
-      include: [{
-          model:Review,
-          as: "reviews"
-      },{
-        model: Technology,
-        through: {
+    let product = await Template.findByPk(id, {
+      include: [
+        {
+          model: Review,
+          as: "reviews",
+        },
+        {
+          model: Technology,
+          through: {
             attributes: [],
-          }
-    },
-    {
-      model: Category,
-      through: {
-          attributes: [],
-        }
-  },{model: Image,
-    through: {
-        attributes: [],
-      },
-      attributes: ['original'],
-    },
-  ],
-});
+          },
+        },
+        {
+          model: Category,
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: Image,
+          through: {
+            attributes: [],
+          },
+          attributes: ["original"],
+        },
+      ],
+    });
 
-// Procesar las imágenes para incluir solo la propiedad original
-if (product && product.Images) {
-  product.Images = product.Images.map(image => ({
-    original: image.original,
-  }));
-}
-      return product;
+    // Procesar las imágenes para incluir solo la propiedad original
+    if (product && product.Images) {
+      product.Images = product.Images.map((image) => ({
+        original: image.original,
+      }));
+    }
+    return product;
   } catch (error) {
     console.error(error);
-    return { error: 'An error occurred while fetching the template.', status: 500 };
-}
-}
+    return {
+      error: "An error occurred while fetching the template.",
+      status: 500,
+    };
+  }
+};
 
 const searchTemplateByTechnology = async (req, res) => {
   const technologyName = req.query.technology;
@@ -189,5 +176,4 @@ module.exports = {
   getAllCategories,
   getAllTechnologies,
   searchTemplateByTechnology,
-  CreateTemplates,
 };
