@@ -6,6 +6,7 @@ const {
 } = require("../services/templatesServices");
 const data = require("../../Data.json");
 const { Category, Technology, Template, Image } = require("../db");
+const { CreateTemplates } = require("../services/adminTemplatesServices");
 // const { guardaImagenes } = require("../cloudinary/agregarImagen");
 // const { CreateTemplates } = require("../services/adminTemplates");
 
@@ -35,6 +36,7 @@ const postTemplates = async (req, res) => {
 const getTemplates = async (req, res) => {
   const { technology, category, sortBy, order, page, pageSize, imagen } =
     req.query;
+  
   try {
     const templates = await getFilteredTemplates({
       imagen,
