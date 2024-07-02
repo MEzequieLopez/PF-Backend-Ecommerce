@@ -48,15 +48,6 @@ const getFilteredTemplates = async ({
         ...technologyFilter,
         ...categoryFilter,
       },
-      include: [
-        {
-          model: Image,
-          through: {
-            attributes: [],
-          },
-          where: imagen,
-        },
-      ],
     });
 
 
