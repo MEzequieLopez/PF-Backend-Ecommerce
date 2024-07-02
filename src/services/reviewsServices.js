@@ -24,28 +24,6 @@ const getReviewsByTemplateIdServices = async (id)=>{
 }
 
 
-
-/*const postReviewServices = async (data)=>{
-    try {
-        if(!data.id || !data.rating || !data.content || !data.idTemplate) throw 'Faltan datos obligatorios';
-        else{
-            let dataReview= {
-                id:data.id,
-                rating:data.rating,
-                content:data.content,
-                
-                idTemplate:data.idTemplate
-            }
-            let newReview = await Review.create(dataReview);
-            return newReview;
-        }
-    } catch (error) {
-        console.error(error);
-        return error
-    }
-}
-*/
-
 const postReviewServices = async (userId, data) => {
     try {
         
@@ -103,6 +81,38 @@ const getReviewsUserServices = async (idUser) => {
   
     return user;
   };
+
+  const deleteReviewUserServices = async (id) => {
+    try {
+        const review = await Review.findByPk(id);
+        if (!review) {
+            throw new Error(`Review con id ${id} no encontrada`);
+        }
+        await review.destroy();
+        return { message: 'Review eliminada' };
+    } catch (error) {
+        console.error('Error:', error.message);
+        return error;
+    }
+};
+
+const updateReviewServices = async (id, data) => {
+    try {
+        const review = await Review.findByPk(id);
+
+        if (!review) {
+            throw new Error('Review not found');
+        }
+
+        await review.update(data);
+        return review;
+    } catch (error) {
+        console.error('Error:', error.message);
+        return error;
+    }
+};
+
+
   
 
 
@@ -110,5 +120,7 @@ module.exports = {
     getReviewsServices,
     getReviewsByTemplateIdServices,
     getReviewsUserServices,
-    postReviewServices
+    postReviewServices,
+    deleteReviewUserServices,
+    updateReviewServices,
  }
