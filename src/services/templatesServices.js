@@ -29,15 +29,6 @@ const getFilteredTemplates = async ({
         ...technologyFilter,
         ...categoryFilter,
       },
-      include: [
-        {
-          model: Image,
-          through: {
-            attributes: [],
-          },
-          where: imagen,
-        },
-      ],
     });
 
 
@@ -148,8 +139,7 @@ const getTemplateId = async (id) => {
 
 const searchTemplateByTechnology = async (req, res) => {
   const technologyName = req.query.technology;
-  console.log("Searching for technology:", technologyName);
-
+  
   try {
     const technologies = await Technology.findAll({
       where: {

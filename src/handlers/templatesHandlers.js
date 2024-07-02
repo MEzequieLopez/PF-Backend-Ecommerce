@@ -103,7 +103,7 @@ const loadDb = async (req, res) => {
         description: templateData.description,
         price: templateData.price,
       });
-    console.log(templateData.categories);
+    
       const templateCategories = await Category.findAll({
         where: {
           name: templateData.categories,

@@ -43,7 +43,6 @@ const loginService = async (email, userPassword, firebaseToken) => {
         } ]
       });
       if (!user) {
-        console.log(decodedToken);
         user = await User.create(
           {
             email,
