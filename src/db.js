@@ -107,6 +107,11 @@ Template.belongsToMany(Cart, { through: 'CartTemplates', as: "toCart" });
 Order.belongsToMany(Template, { through: 'OrderTemplates', as: 'purchasedTemplates' });
 Template.belongsToMany(Order, { through: 'OrderTemplates', as: 'orders' });
 
+// Relacion admin y user. (one-to-one).
+User.hasOne(Admin, { foreignKey: 'user_id', as: 'admin' });
+Admin.belongsTo(User, { foreignKey: 'user_id' });
+
+
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize, // para importart la conexión { conn } = require('./db.js');

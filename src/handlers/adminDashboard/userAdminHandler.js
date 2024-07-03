@@ -195,21 +195,32 @@ const activateUserByEmail = async (req, res) => {
 // ver todos los usuarios NO desactivados. GET
 const viewAllUsers = async (req, res) => {
     try {
-        const allUsers = await User.findAll({where:{ deleted_at: null}});
+        const allUsers = await User.findAll({
+            where: { deleted_at: null },
+            include: [{
+                model: Admin,
+                as: 'admin', // Ensure this alias matches your association alias
+                required: false // This makes the Admin association optional
+            }]
+        });
 
         if (allUsers.length === 0) {
             return res.status(404).json({ noUsersFound: 'No existen usuarios' });
         }
 
-        // agregar atributo a los admin users para renderizar en el front.
-        
+        const usersWithAdminStatus = allUsers.map(user => ({
+            ...user.toJSON(),
+            isAdmin: user.admin !== null // Check if `admin` association exists
+        }));
 
-        return res.json(allUsers);
-
+        return res.json(usersWithAdminStatus);
     } catch (error) {
-        return res.status(500).json(`Internal Server Error: ${error}`)
+        return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
     }
 };
+
+
+
 
 
 // ver todos los usuarios desactivados. GEY
