@@ -195,18 +195,22 @@ const activateUserByEmail = async (req, res) => {
 // ver todos los usuarios NO desactivados. GET
 const viewAllUsers = async (req, res) => {
     try {
-        
-        const allUsers = await User.findAll({where: {deleted_at: null}});
-        if (allUsers.length === 0) {
-            return res.status(404).json({noUsersFound: 'No existen usuarios'})
-        };
+        const allUsers = await User.findAll({where:{ deleted_at: null}});
 
-        return res.json(allUsers)
+        if (allUsers.length === 0) {
+            return res.status(404).json({ noUsersFound: 'No existen usuarios' });
+        }
+
+        // agregar atributo a los admin users para renderizar en el front.
+        
+
+        return res.json(allUsers);
 
     } catch (error) {
-        return res.status(500).json({ error: `Internal Server Error: ${error}` });
+        return res.status(500).json(`Internal Server Error: ${error}`)
     }
 };
+
 
 // ver todos los usuarios desactivados. GEY
 const viewAllDisabledUsers = async (req, res) => {
