@@ -72,23 +72,28 @@ Category.belongsToMany(Template, { through: 'TemplateCategories' });
 User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 
+
 Template.hasMany(Review, {
-  foreignKey: 'templateId', 
-  as: 'reviews' 
+  //foreignKey: 'templateId',
+  foreignKey: 'idTemplate',
+  as: 'reviews'
 });
 
 Review.belongsTo(Template, {
-  foreignKey: 'templateId' 
+  //foreignKey: 'templateId' 
+  foreignKey: 'idTemplate',
 });
 
 
 User.hasMany(Review, {
-  foreignKey: 'userId', 
-  as: 'reviews' 
+  //foreignKey: 'userId', 
+  foreignKey: 'idUser',
+  as: 'reviews'
 });
 
 Review.belongsTo(User, {
-  foreignKey: 'userId' 
+  //foreignKey: 'userId' 
+  foreignKey: 'idUser'
 });
 
 User.hasOne(Cart);

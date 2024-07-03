@@ -8,6 +8,8 @@ reviewsRouter
     .get("/:id", getReviewsTemplate)
     .post("/",  loginRequire, postReview)
     .get('/', loginRequire, getReviewsUser)
+    .put('/:id', loginRequire,updateReview)
+    .delete('/:id', loginRequire, deleteReview);
     
    
     
