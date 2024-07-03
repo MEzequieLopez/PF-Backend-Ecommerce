@@ -21,12 +21,21 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
       allowNull: false,  
     },
+    // imagen:{ type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
+    
+    
     // deleted_at: {aqui se puede incluir soft-deletion} o paranoid: true
     deleted_at: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null // <-- utilizando paranoid: true No habria filtrar manualmente en las rutas.
     },
+    technology:{
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
 
   },
   {

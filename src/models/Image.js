@@ -15,15 +15,15 @@ module.exports = (sequelize) => {
     },
     isCover: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
     },
     set: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     category: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     }
 },
 {
