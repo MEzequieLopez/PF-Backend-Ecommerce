@@ -5,21 +5,12 @@ const routes = require('./routes/index');
 const bodyParser = require('body-parser');
 const app = express();
 
-const debugMiddleware = (req, res, next) => {
-  console.log('Antes de los middlewares:', req.userId);
-  next();
-  console.log('Después de los middlewares:', req.userId);
-};
-
-
-
 // Middlewares
 app.use(cors()); 
 app.use(morgan('dev')); 
 app.use(express.json());
 // Middleware para parsear JSON
 app.use(bodyParser.json());
-// app.use(debugMiddleware);
 
 // Rutas
 app.use('/', routes);
