@@ -24,31 +24,19 @@ const getReviewsByTemplateIdServices = async (id)=>{
 }
 
 
-
-/*const postReviewServices = async (data)=>{
-    try {
-        if(!data.id || !data.rating || !data.content || !data.idTemplate) throw 'Faltan datos obligatorios';
-        else{
-            let dataReview= {
-                id:data.id,
-                rating:data.rating,
-                content:data.content,
-                
-                idTemplate:data.idTemplate
-            }
-            let newReview = await Review.create(dataReview);
-            return newReview;
-        }
-    } catch (error) {
-        console.error(error);
-        return error
-    }
-}
-*/
-
 const postReviewServices = async (userId, data) => {
     try {
         
+        const existingReview = await Review.findOne({
+            where: {
+                idUser: userId,
+                idTemplate: data.idTemplate
+            }
+        });
+
+        if (existingReview) {
+            throw new Error(`El usuario ya ha dejado una opinión para esta plantilla`);
+        }
         const requiredFields = ['rating', 'content', 'idTemplate'];
         for (const field of requiredFields) {
             if (!data[field]) {
@@ -59,7 +47,7 @@ const postReviewServices = async (userId, data) => {
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error(`Usuario con id ${userId} no encontrado`);
-            throw new Error(`Usuario con id ${userId} no encontrado`);
+            
         }
         const template = await Template.findByPk(data.idTemplate);
         if (!template) {
@@ -85,7 +73,7 @@ const getReviewsUserServices = async (idUser) => {
     if (!idUser) {
       throw new Error('User ID is required');
     }
-    console.log('ID recibido en el servicio:', idUser);
+    
     const user = await User.findOne({
         where: { id: idUser },
         include: {
@@ -134,34 +122,8 @@ const updateReviewServices = async (id, data) => {
     }
 };
 
-const getTemplateAverageRatingsService = async () => {
-    try {
-        const templates = await Template.findAll({
-            include: [{
-                model: Review,
-                as: 'reviews',
-            }]
-        });
 
-        const averageRatings = templates.map(template => {
-            const totalRatings = template.reviews.reduce((sum, review) => sum + review.rating, 0);
-            const averageRating = template.reviews.length ? totalRatings / template.reviews.length : 0;
-            return {
-                templateId: template.id,
-                templateName: template.name,
-                averageRating: averageRating.toFixed(2),
-            };
-        });
-
-        return averageRatings;
-    } catch (error) {
-        console.error('Error fetching template ratings:', error);
-        throw new Error('An error occurred while fetching template ratings.');
-    }
-};
-
-
-
+  
 
 
 module.exports = {
@@ -171,5 +133,4 @@ module.exports = {
     postReviewServices,
     deleteReviewUserServices,
     updateReviewServices,
-    getTemplateAverageRatingsService
  }
