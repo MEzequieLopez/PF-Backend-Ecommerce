@@ -3,7 +3,6 @@ const { User, Template } = require('../db');
 const token = require('../utils/token');
 const sendMail = require('../utils/nodemailer');
 
-
 const registerService = async (email, lastname, name, userPassword, image) => {
     try {
         const salt = await bcrypt.genSalt(10);
@@ -32,6 +31,17 @@ const registerService = async (email, lastname, name, userPassword, image) => {
 const loginService = async (email, userPassword) => {
     try {
         const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+          return { status: 400, userNotFound: 'Usuario no encontrado.' };
+      }
+
+      // verificar si usuario ha sido desactivado
+      if (user.deleted_at !== null) {
+          return { status: 403, accountDisabled: 'Tu cuenta ha sido desactivada.' };
+      }
+
+
         const passwordCorrect = user === null
             ? false
             : await bcrypt.compare(userPassword, user.password);

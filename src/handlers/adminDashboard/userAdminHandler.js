@@ -72,6 +72,11 @@ const disableUserById = async (req, res) => {
 
         await userToBan.update({ deleted_at: new Date() });
 
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, userToBan.email, 'Cuenta desactivada', 'Tu cuenta ha sido desactivada.');
+
+
         return res.json({ userBanned: `Usuario con id: ${user_id} ha sido desactivado` });
     } catch (error) {
         return res.status(500).json(`Internal Server Error: ${error}`);
@@ -106,6 +111,10 @@ const disableUserByEmail = async (req, res) => {
 
         await user.update({ deleted_at: new Date() });
 
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, user.email, 'Cuenta desactivada', 'Tu cuenta ha sido desactivada.');
+
         return res.json({ userBanned: `Usuario con email: ${email} ha sido desactivado` });
     } catch (error) {
         return res.status(500).json({ error: `Internal Server Error: ${error}` });
@@ -135,6 +144,11 @@ const activateUserById = async (req, res) => {
         // un ban the user
         await user.update({deleted_at: null})
 
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, user.email, 'Cuenta activada', 'Tu cuenta ha sido activada.');
+
+
         return res.status(201).json('usuario Activado exitosamente')
         
     } catch (error) {
@@ -163,6 +177,11 @@ const activateUserByEmail = async (req, res) => {
         };
 
         await user.update({deleted_at: null});
+
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, user.email, 'Cuenta activada', 'Tu cuenta ha sido activada.');
+
 
         return res.status(201).json({ message: `Usuario con email: ${email} ha sido activado exitosamente` });
 
