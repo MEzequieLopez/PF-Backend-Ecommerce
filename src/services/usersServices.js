@@ -29,12 +29,43 @@ const registerService = async (email, lastname, name, userPassword, image) => {
     }
 };
 
-const loginService = async (email, userPassword) => {
-    try {
-        const user = await User.findOne({ where: { email } });
-        const passwordCorrect = user === null
-            ? false
-            : await bcrypt.compare(userPassword, user.password);
+const loginService = async (email, userPassword, firebaseToken) => {
+  try {
+    let user;
+    if (firebaseToken) {
+      const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseToken);
+      const { uid, email } = decodedToken;
+
+      user = await User.findOne({
+        where: { firebaseUid: uid }, include: [ {
+          model: Order,
+          foreignKey: "user_id"
+        } ]
+      });
+      if (!user) {
+        user = await User.create(
+          {
+            email,
+            firebaseUid: uid,
+            name: decodedToken.name.split(" ")[ 0 ],
+            lastname: decodedToken.name.split(" ")[ 2 ] || decodedToken.name.split(" ")[ 1 ],
+            imagen: decodedToken.picture
+          }
+        );
+      }
+    } else {
+
+      user = await User.findOne({
+        where: { email },
+        include: [ {
+          model: Order,
+          foreignKey: "user_id"
+        } ]
+      });
+
+      const passwordCorrect = user === null
+        ? false
+        : await bcrypt.compare(userPassword, user.password);
 
         if (!(user && passwordCorrect)) {
             return { status: 400, error: 'Email o contraseña inválidos.' };

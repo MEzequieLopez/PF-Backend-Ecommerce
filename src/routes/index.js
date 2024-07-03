@@ -4,7 +4,9 @@ const reviewsRouter = require("./reviewsRoutes");
 const stripeRouter = require("./stripeRoutes");
 const cartRouter = require("./cartRoutes");
 const adminTemplatesRouter = require("./adminTemplatesRoutes"); 
-// const adminUserRouter = require('./adminUserRoutes');
+const adminUserRouter = require('./adminUserRoutes');
+
+
 const router = require("express").Router();
 
 router

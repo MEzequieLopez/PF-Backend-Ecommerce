@@ -38,10 +38,19 @@ const getFilteredTemplates = async ({
       orderArray.push([sortBy, order.toUpperCase()]);
     }
 
-    const limit = pageSize ? parseInt(pageSize) : null;
-    const offset = page ? (parseInt(page) - 1) * (limit || 0) : null;
+    const limit = pageSize ? parseInt(pageSize) : 5; // Valor predeterminado de 5 si no se especifica
+    const offset = page ? (parseInt(page) - 1) * limit : 0;
 
-    const totalCount = await Template.count();
+    // Contar el total de plantillas con los filtros aplicados
+    const totalCount = await Template.count({
+      where: {
+        // Aplica los filtros según corresponda
+        ...technologyFilter,
+        ...categoryFilter,
+      },
+    });
+
+
     const templates = await Template.findAll({
       include: [
         {
@@ -146,8 +155,7 @@ const getTemplateId = async (id) => {
 
 const searchTemplateByTechnology = async (req, res) => {
   const technologyName = req.query.technology;
-  console.log("Searching for technology:", technologyName);
-
+  
   try {
     const technologies = await Technology.findAll({
       where: {

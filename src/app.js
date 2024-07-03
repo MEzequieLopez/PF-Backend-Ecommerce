@@ -4,10 +4,14 @@ const cors = require('cors');
 const routes = require('./routes/index');
 
 const app = express();
+
 // Middlewares
 app.use(cors()); 
 app.use(morgan('dev')); 
 app.use(express.json());
+// Middleware para parsear JSON
+app.use(bodyParser.json());
+
 
 // Rutas
 app.use('/', routes);

@@ -3,7 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { image } = require("./cloudinary");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_URL } = process.env;
 
 const sequelize = new Sequelize({
   database: `${DB_NAME}`,
@@ -11,13 +11,13 @@ const sequelize = new Sequelize({
   password: `${DB_PASSWORD}`,
   host: `${DB_HOST}`,
   dialect: "postgres",
-
-  /*dialectOptions: {
-    ssl: {
-      require: true, 
-      rejectUnauthorized: false 
-    }
-  }, */
+  protocol: 'postgres',
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false
+  //   }
+  // },
   logging: false,
 });
 
@@ -49,8 +49,7 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
   OrderPayment, PaymentStatus, ReportedTemplate, Admin
 } = sequelize.models;
 
-// Category.belongsToMany(Template);
-// Template.belongsTo(Category);
+
 Template.belongsToMany(Image, { through: "TemplateImages" });
 Image.belongsToMany(Template, { through: "TemplateImages" });
 
@@ -72,17 +71,7 @@ Category.belongsToMany(Template, { through: 'TemplateCategories' });
 //es mejor tener otra tabla Favorite y establecer una relacion many-to-many con Template y de one-to-many entre Favorite y User.
 User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
-// relacion entre Image y Template (many-to-many)
 
-
-
-//Relacion entre Template y review 
-//Template.hasMany(Review);
-//Review.belongsTo(Template);
-
-//Relacion entre usuario y review
-//User.hasMany(Review);
-//Review.belongsTo(User);
 Template.hasMany(Review, {
   foreignKey: 'templateId', 
   as: 'reviews' 

@@ -7,7 +7,7 @@ const {
 const data = require("../../Data.json");
 const { Category, Technology, Template, Image } = require("../db");
 const { CreateTemplates } = require("../services/adminTemplatesServices");
-const { guardaImagenes } = require("../cloudinary/agregarImagen");
+ const { guardaImagenes } = require("../cloudinary/agregarImagen");
 // const { CreateTemplates } = require("../services/adminTemplates");
 
 const postTemplates = async (req, res) => {
@@ -102,7 +102,7 @@ const loadDb = async (req, res) => {
         description: templateData.description,
         price: templateData.price,
       });
-    console.log(templateData.categories);
+    
       const templateCategories = await Category.findAll({
         where: {
           name: templateData.categories,

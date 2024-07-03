@@ -31,31 +31,20 @@ const getReviewsUserServices = async (userId)=> {
 }
 
 
-/*const postReviewServices = async (obj)=>{
-    try {
-        if(!obj.idUser || !obj.rating || !obj.content || !obj.idTemplate) throw 'Faltan datos obligatorios';
-        else{
-            let objReview= {
-                idUser:obj.idUser,
-                rating:obj.rating,
-                content:obj.content,
-                
-                idTemplate:obj.idTemplate
-            }
-            let newReview = await Review.create(objReview);
-            return newReview;
-        }
-    } catch (error) {
-        console.error(error);
-        return error
-    }
-}
-*/
-
 const postReviewServices = async (userId, templeId, obj) => {
     try {
         
-        const requiredFields = ['rating', 'content'];
+        const existingReview = await Review.findOne({
+            where: {
+                idUser: userId,
+                idTemplate: data.idTemplate
+            }
+        });
+
+        if (existingReview) {
+            throw new Error(`El usuario ya ha dejado una opinión para esta plantilla`);
+        }
+        const requiredFields = ['rating', 'content', 'idTemplate'];
         for (const field of requiredFields) {
             if (!obj[field]) {
                 throw new Error(`Falta el campo obligatorio: ${field}`);
@@ -64,6 +53,7 @@ const postReviewServices = async (userId, templeId, obj) => {
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error(`Usuario con id ${userId} no encontrado`);
+            
         }
         const template = await Template.findByPk(templeId);
         if (!template) {
@@ -85,8 +75,69 @@ const postReviewServices = async (userId, templeId, obj) => {
         throw error; 
     }
 };
+
+
+const getReviewsUserServices = async (idUser) => {
+    if (!idUser) {
+      throw new Error('User ID is required');
+    }
+    
+    const user = await User.findOne({
+        where: { id: idUser },
+        include: {
+        model: Review,
+        as: 'reviews',
+        //through: {
+        //    attributes: []
+        //}
+      }
+    });  
+    console.log(user)
+    if (!user) {
+      throw new Error('User not found');
+    }
+  
+    return user;
+  };
+
+  const deleteReviewUserServices = async (id) => {
+    try {
+        const review = await Review.findByPk(id);
+        if (!review) {
+            throw new Error(`Review con id ${id} no encontrada`);
+        }
+        await review.destroy();
+        return { message: 'Review eliminada' };
+    } catch (error) {
+        console.error('Error:', error.message);
+        return error;
+    }
+};
+
+const updateReviewServices = async (id, data) => {
+    try {
+        const review = await Review.findByPk(id);
+
+        if (!review) {
+            throw new Error('Review not found');
+        }
+
+        await review.update(data);
+        return review;
+    } catch (error) {
+        console.error('Error:', error.message);
+        return error;
+    }
+};
+
+
+  
+
+
 module.exports = {
     getReviewsDetailServices,
     getReviewsUserServices,
-    postReviewServices
+    postReviewServices,
+    deleteReviewUserServices,
+    updateReviewServices,
  }
