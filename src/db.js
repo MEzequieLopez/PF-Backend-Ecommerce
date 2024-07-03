@@ -5,11 +5,11 @@ const path = require("path");
 const { image } = require("./cloudinary");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_URL } = process.env;
 
-const sequelize = new Sequelize(DB_URL,{
-  // database: `${DB_NAME}`,
-  // username: `${DB_USER}`,
-  // password: `${DB_PASSWORD}`,
-  // host: `${DB_HOST}`,
+const sequelize = new Sequelize({
+  database: `${DB_NAME}`,
+  username: `${DB_USER}`,
+  password: `${DB_PASSWORD}`,
+  host: `${DB_HOST}`,
   dialect: "postgres",
   protocol: 'postgres',
   // dialectOptions: {

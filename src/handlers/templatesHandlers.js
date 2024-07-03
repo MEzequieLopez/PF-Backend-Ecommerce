@@ -3,8 +3,8 @@ const {
   getTemplateId,
   getAllTechnologies,
   getAllCategories,
-  CreateTemplates,
 } = require("../services/templatesServices");
+const { CreateTemplates} = require("../services/adminTemplatesServices")
 const data = require("../../Data.json");
 const { Category, Technology, Template, Image } = require("../db");
 const { guardaImagenes } = require("../cloudinary/agregarImagen");
