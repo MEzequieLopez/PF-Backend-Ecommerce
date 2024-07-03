@@ -1,6 +1,7 @@
 const { Category, Technology, Template, Review, Image } = require("../db");
 const { Sequelize, Op } = require("sequelize");
 
+<<<<<<< HEAD
 const CreateTemplates = async (
   name,
   description,
@@ -20,6 +21,8 @@ if(category) await newTemplate.addCategory(category);
 return newTemplate
 
 }
+=======
+>>>>>>> 6f38acda5712cb460756e8153581aa1fa5cb2bcf
 const getFilteredTemplates = async ({
   imagen,
   technology,
@@ -100,6 +103,45 @@ const getAllTechnologies = async () => {
 
 const getTemplateId = async (id) => {
   try {
+<<<<<<< HEAD
+    let product= await Template.findByPk(id, {
+      
+      include: [{
+          model:Review,
+          as: "reviews"
+      },{
+        model: Technology,
+        through: {
+            attributes: [],
+          }
+    },
+    {
+      model: Category,
+      through: {
+          attributes: [],
+        }
+  },{model: Image,
+    through: {
+        attributes: [],
+      },
+      attributes: ['original'],
+    },
+  ],
+});
+
+// Procesar las imágenes para incluir solo la propiedad original
+if (product && product.Images) {
+  product.Images = product.Images.map(image => ({
+    original: image.original,
+  }));
+}
+      return product;
+  } catch (error) {
+    console.error(error);
+    return { error: 'An error occurred while fetching the template.', status: 500 };
+}
+}
+=======
     let product = await Template.findByPk(id, {
       include: [
         {
@@ -143,6 +185,7 @@ const getTemplateId = async (id) => {
     };
   }
 };
+>>>>>>> 6f38acda5712cb460756e8153581aa1fa5cb2bcf
 
 const searchTemplateByTechnology = async (req, res) => {
   const technologyName = req.query.technology;
