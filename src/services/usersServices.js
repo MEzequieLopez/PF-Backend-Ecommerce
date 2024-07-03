@@ -30,6 +30,17 @@ const registerService = async (email, lastname, name, userPassword, image) => {
 };
 
 const loginService = async (email, userPassword, firebaseToken) => {
+
+  // verificar si usuario esta desactivado.
+  const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+          return { status: 400, error: 'Usuario no encontrado.' };
+      };
+      if (user.deleted_at !== null) {
+          return { status: 403, error: 'Tu cuenta ha sido desactivada.' };
+      };
+
   try {
     let user;
     if (firebaseToken) {
@@ -43,6 +54,7 @@ const loginService = async (email, userPassword, firebaseToken) => {
         } ]
       });
       if (!user) {
+        console.log(decodedToken);
         user = await User.create(
           {
             email,

@@ -16,7 +16,6 @@
       "env": {
         "NODE_ENV": "production"
       }
-    },
-    "cache": false
+    }
   }
   
