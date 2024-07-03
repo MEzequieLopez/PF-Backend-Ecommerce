@@ -101,6 +101,7 @@ const loadDb = async (req, res) => {
         name: templateData.name,
         description: templateData.description,
         price: templateData.price,
+        technology: templateData.technologies[0]
       });
     console.log(templateData.categories);
       const templateCategories = await Category.findAll({

@@ -165,40 +165,34 @@ const searchTemplateByTechnology = async (req, res) => {
   console.log("Searching for technology:", technologyName);
 
   try {
-    const technologies = await Technology.findAll({
+    const templates = await Template.findAll({
       where: {
-        name: {
-          [ Op.iLike ]: `%${technologyName}%`, // Utiliza ILIKE para búsqueda por coincidencia parcial
+        technology: {
+          [ Op.iLike ]: `${technologyName}`, // Utiliza ILIKE para búsqueda por coincidencia parcial
         },
       },
       include: [
-        {
-          model: Template,
-          through: { attributes: [] }, // Asegura que no se incluyan atributos adicionales de la tabla intermedia
-        },
+      {
+          model: Image,
+          through: {
+            attributes: [],
+          },
+        }
       ],
     });
 
-    if (technologies.length === 0) {
+
+
+    if (templates.length === 0) {
       console.log("Technology not found:", technologyName);
       return res.status(404).json({ error: "Technology not found" });
     }
-
+    console.log(templates);
     // Mapeamos los resultados para formatear la respuesta deseada
-    const formattedTechnologies = technologies.map((tech) => ({
-      id: tech.id,
 
-      templates: tech.templates.map((template) => ({
-        technology: tech.name,
-        id: template.id,
-        name: template.name,
-        description: template.description,
-        price: template.price,
-      })),
-    }));
 
-    console.log("Technologies found:", formattedTechnologies);
-    res.status(200).json(formattedTechnologies);
+    console.log("Technologies found:", templates);
+   return res.status(200).json(templates);
   } catch (error) {
     console.error("Error searching by technology:", error);
     res.status(500).json({ error: "Internal Server Error" });
