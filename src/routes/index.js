@@ -5,7 +5,7 @@ const stripeRouter = require("./stripeRoutes");
 const cartRouter = require("./cartRoutes");
 const adminTemplatesRouter = require("./adminTemplatesRoutes"); 
 const adminUserRouter = require('./adminUserRoutes');
-const { adminTemplatesRouter } = require("./adminTemplatesRouter");
+
 
 const router = require("express").Router();
 
