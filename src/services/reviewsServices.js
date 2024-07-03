@@ -122,8 +122,34 @@ const updateReviewServices = async (id, data) => {
     }
 };
 
+const getTemplateAverageRatingsService = async () => {
+    try {
+        const templates = await Template.findAll({
+            include: [{
+                model: Review,
+                as: 'reviews',
+            }]
+        });
 
-  
+        const averageRatings = templates.map(template => {
+            const totalRatings = template.reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = template.reviews.length ? totalRatings / template.reviews.length : 0;
+            return {
+                templateId: template.id,
+                templateName: template.name,
+                averageRating: averageRating.toFixed(2),
+            };
+        });
+
+        return averageRatings;
+    } catch (error) {
+        console.error('Error fetching template ratings:', error);
+        throw new Error('An error occurred while fetching template ratings.');
+    }
+};
+
+
+
 
 
 module.exports = {
@@ -133,4 +159,5 @@ module.exports = {
     postReviewServices,
     deleteReviewUserServices,
     updateReviewServices,
+    getTemplateAverageRatingsService
  }
