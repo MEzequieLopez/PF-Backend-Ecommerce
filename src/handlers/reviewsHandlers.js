@@ -1,51 +1,9 @@
-const { getReviewsServices, postReviewServices, getReviewsByTemplateIdServices, getReviewsUserServices, deleteReviewUserServices, updateReviewServices, getTemplateAverageRatingsService} = require("../services/reviewsServices")
+const { getReviewsServices, postReviewServices, getReviewsByTemplateIdServices, getReviewsUserServices, deleteReviewUserServices, updateReviewServices} = require("../services/reviewsServices")
 
 const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 
-/*const getReviewsTemplate = async (req, res) => {
-    const templateId = req.query.templateId
-    console.log(templateId)
-
-    try {
-        const response = await getReviewsDetailServices(templateId)
-
-        if (!response || Object.keys(response).length === 0) {
-            return res.status(404).send('No reviews found')
-        }
-
-        return res.status(200).send(response)
-
-    } catch (error) {
-        console.error(error);
-        return res.json(error);
-    }
-} */
-
-/*const getReviewsUser = async (req, res) => {
-    const userId = req.userId
-    console.log(userId)
-    try {
-        const response = await getReviewsUserServices(userId)
-
-        if (!response || Object.keys(response).length === 0) {
-            return res.status(404).send('No user found')
-        }
-
-        return res.status(200).send(response)
-
-    } catch (error) {
-        console.error(error);
-        return res.json(error);
-    }
-} */
-
 const getReviewsTemplate = async (req, res) => {
     const { id } = req.params;
-
-   /* if (!uuidValidate(id)) {
-        return res.status(400).json({ message: 'Invalid UUID format' });
-    } */
-
     try {
         const reviews = await getReviewsByTemplateIdServices(id)
         
@@ -64,7 +22,7 @@ const getReviewsTemplate = async (req, res) => {
 const getReviewsUser = async (req, res) => {
 
   const  idUser  = req.userId
-      console.log('ID recibido en el controlador:', idUser);
+      
 
     try {
       
@@ -130,22 +88,11 @@ const updateReview= async (req, res) => {
   }
 };
 
-const getTemplateAverageRatings = async (req, res) => {
-  try {
-      const averageRatings = await getTemplateAverageRatingsService();
-      res.status(200).json(averageRatings);
-  } catch (error) {
-      console.error('Error fetching template average ratings:', error);
-      res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
 module.exports = {
     
     getReviewsTemplate,
     getReviewsUser,
     postReview,
     updateReview,
-    deleteReview,
-    getTemplateAverageRatings
+    deleteReview
 }
