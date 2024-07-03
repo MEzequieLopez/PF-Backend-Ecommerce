@@ -103,12 +103,73 @@ const getReviewsUserServices = async (idUser) => {
   
     return user;
   };
-  
+
+  const deleteReviewUserServices = async (id) => {
+    try {
+        const review = await Review.findByPk(id);
+        if (!review) {
+            throw new Error(`Review con id ${id} no encontrada`);
+        }
+        await review.destroy();
+        return { message: 'Review eliminada' };
+    } catch (error) {
+        console.error('Error:', error.message);
+        return error;
+    }
+};
+
+const updateReviewServices = async (id, data) => {
+    try {
+        const review = await Review.findByPk(id);
+
+        if (!review) {
+            throw new Error('Review not found');
+        }
+
+        await review.update(data);
+        return review;
+    } catch (error) {
+        console.error('Error:', error.message);
+        return error;
+    }
+};
+
+const getTemplateAverageRatingsService = async () => {
+    try {
+        const templates = await Template.findAll({
+            include: [{
+                model: Review,
+                as: 'reviews',
+            }]
+        });
+
+        const averageRatings = templates.map(template => {
+            const totalRatings = template.reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = template.reviews.length ? totalRatings / template.reviews.length : 0;
+            return {
+                templateId: template.id,
+                templateName: template.name,
+                averageRating: averageRating.toFixed(2),
+            };
+        });
+
+        return averageRatings;
+    } catch (error) {
+        console.error('Error fetching template ratings:', error);
+        throw new Error('An error occurred while fetching template ratings.');
+    }
+};
+
+
+
 
 
 module.exports = {
     getReviewsServices,
     getReviewsByTemplateIdServices,
     getReviewsUserServices,
-    postReviewServices
+    postReviewServices,
+    deleteReviewUserServices,
+    updateReviewServices,
+    getTemplateAverageRatingsService
  }

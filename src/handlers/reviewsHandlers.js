@@ -1,4 +1,4 @@
-const { getReviewsServices, postReviewServices, getReviewsByTemplateIdServices, getReviewsUserServices} = require("../services/reviewsServices")
+const { getReviewsServices, postReviewServices, getReviewsByTemplateIdServices, getReviewsUserServices, deleteReviewUserServices, updateReviewServices, getTemplateAverageRatingsService} = require("../services/reviewsServices")
 
 const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 
@@ -106,9 +106,46 @@ const postReview = async (req, res) => {
     }
 };
 
+const deleteReview = async (req, res) => {
+  const { id } = req.params;
+  try {
+      const deleteReview = await deleteReviewUserServices(id);
+      res.status(200).json(deleteReview);
+  } catch (error) {
+      console.error('Error:', error.message);
+      res.status(400).json({ error: error.message });
+  }
+};
+
+const updateReview= async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+      const updatedReview = await updateReviewServices(id, data);
+      res.status(200).json(updatedReview);
+  } catch (error) {
+      console.error('Error:', error.message);
+      res.status(400).json({ error: error.message });
+  }
+};
+
+const getTemplateAverageRatings = async (req, res) => {
+  try {
+      const averageRatings = await getTemplateAverageRatingsService();
+      res.status(200).json(averageRatings);
+  } catch (error) {
+      console.error('Error fetching template average ratings:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
     
     getReviewsTemplate,
     getReviewsUser,
-    postReview
+    postReview,
+    updateReview,
+    deleteReview,
+    getTemplateAverageRatings
 }
