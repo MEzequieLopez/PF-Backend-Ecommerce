@@ -3,7 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { image } = require("./cloudinary");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_URL } = process.env;
 
 const sequelize = new Sequelize({
   database: `${DB_NAME}`,
@@ -11,13 +11,13 @@ const sequelize = new Sequelize({
   password: `${DB_PASSWORD}`,
   host: `${DB_HOST}`,
   dialect: "postgres",
-
-  /*dialectOptions: {
-    ssl: {
-      require: true, 
-      rejectUnauthorized: false 
-    }
-  }, */
+  protocol: 'postgres',
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false
+  //   }
+  // },
   logging: false,
 });
 
@@ -39,8 +39,8 @@ fs.readdirSync(path.join(__dirname, "/models"))
 modelDefiners.forEach((model) => model(sequelize));
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [
-  entry[0][0].toUpperCase() + entry[0].slice(1),
-  entry[1],
+  entry[ 0 ][ 0 ].toUpperCase() + entry[ 0 ].slice(1),
+  entry[ 1 ],
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
@@ -49,14 +49,12 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
   OrderPayment, PaymentStatus, ReportedTemplate, Admin
 } = sequelize.models;
 
-// Define associations
-// Category.hasMany(Template);
-// Template.belongsTo(Category);
+
 Template.belongsToMany(Image, { through: "TemplateImages" });
 Image.belongsToMany(Template, { through: "TemplateImages" });
 
-Category.belongsToMany(Image, {through: 'CategoriImages'});
-Image.belongsToMany(Category, {through: 'CategoriImages'});
+Category.belongsToMany(Image, { through: 'CategoriImages' });
+Image.belongsToMany(Category, { through: 'CategoriImages' });
 
 Image.belongsTo(User, { through: "userImage" });
 User.belongsTo(Image, { through: "userImage" });
@@ -64,27 +62,20 @@ User.belongsTo(Image, { through: "userImage" });
 Technology.belongsToMany(Category, { through: "TechnologyCategories" });
 Category.belongsToMany(Technology, { through: "TechnologyCategories" });
 
-// un template puede pertencer a varias categorias (many-to-many)
-// un template pertenece a un usuario ? ?
-Template.belongsToMany(User, { through: 'userFavorites', as:"Users" });
+Template.belongsToMany(User, { through: 'userFavorites', as: "Users" });
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Template.belongsToMany(Category, { through: 'TemplateCategories' });
 Category.belongsToMany(Template, { through: 'TemplateCategories' });
-//es mejor tener otra tabla Favorite y establecer una relacion many-to-many con Template y de one-to-many entre Favorite y User.
+
 User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
-// relacion entre Image y Template (many-to-many)
-
-
-
-
 
 Template.hasMany(Review, {
   //foreignKey: 'templateId',
   foreignKey: 'idTemplate',
-  as: 'reviews' 
+  as: 'reviews'
 });
 
 Review.belongsTo(Template, {
@@ -95,8 +86,8 @@ Review.belongsTo(Template, {
 
 User.hasMany(Review, {
   //foreignKey: 'userId', 
-  foreignKey: 'idUser', 
-  as: 'reviews' 
+  foreignKey: 'idUser',
+  as: 'reviews'
 });
 
 Review.belongsTo(User, {
@@ -110,86 +101,11 @@ Cart.belongsTo(User);
 User.hasMany(Order, { foreignKey: 'user_id' });
 Order.belongsTo(User, { foreignKey: 'user_id' });
 
-Cart.belongsToMany(Template, { through: 'CartTemplates', as: "inCart"});
+Cart.belongsToMany(Template, { through: 'CartTemplates', as: "inCart" });
 Template.belongsToMany(Cart, { through: 'CartTemplates', as: "toCart" });
 
 Order.belongsToMany(Template, { through: 'OrderTemplates', as: 'purchasedTemplates' });
 Template.belongsToMany(Order, { through: 'OrderTemplates', as: 'orders' });
-
-/*User.belongsToMany(Review,  {foreignKey: 'user_id'}, {through: 'userReview'}
-
-);
-Review.belongsTo(User, {foreignKey: 'user_id'}, {through: 'userReview'}
-  );
-Review.belongsTo(Template, {foreignKey: 'template_id'}, {through: 'templateReview'}
-  ); // cada review debe ir asociada a un template.
-Template.belongsToMany(Review, {foreignKey: 'template_id'}, {through: 'templateReview'}
-
-); // cada template puede contener muchas reviews.
-
-
-
-// // relacion Entre Cart, User, y Template.
-// // va aqui.
-// Cart.belongsTo(User, {foreignKey: 'user_id'}); // cada cart debe pertenecer a un usuario.
-// Cart.belongsToMany(Template, {through: 'TemplateCart'});
-// Template.belongsToMany(Cart, {through: 'TemplateCart'}); 
-
-
-// // Relacion entre Order, Template, y User.
-// Order.belongsTo(User, {foreignKey: 'customer_id'}); // un usuario puede tener muchas ordenes. cada orden pertenece a un usuario.
-// User.hasMany(OrderPayment, {foreignKey: 'customer_id'});
-// OrderPayment.belongsToMany(Template, {through: 'OrderPaymentTemplate'});
-// Template.hasMany(OrderPayment, {through: 'OrderPaymentTemplate'}); 
-
-// PaymentStatus.belongsTo(OrderPayment, {foreignKey: 'payment_status_id'}); // es importante primero crear: Pending & Fulfilled en en la tabla PaymentStatus.
-
-// PaymentStatus.hasMany(OrderPayment, {foreignKey: 'payment_status_id'}); // PaymentStatus (Pending & Fulfilled) pueden tener varias ordenes asociadas a ellas.
-// OrderPayment.belongsTo(PaymentStatus, {foreignKey: 'payment_status_id'});
-
-// OrderPayment.belongsTo(Order, {foreignKey: 'order_id'});
-// Order.hasMany(OrderPayment, {foreignKey: 'order_id'});
-/*
-// relacion Entre Cart, User, y Template.
-// va aqui.
-Cart.belongsTo(User, {foreignKey: 'user_id'}); // cada cart debe pertenecer a un usuario.
-Cart.belongsToMany(Template, {through: 'TemplateCart'});
-Template.belongsToMany(Cart, {through: 'TemplateCart'}); 
-// Relacion entre Order, Template, y User.
-Order.belongsTo(User, {foreignKey: 'user_id'}); // un usuario puede tener muchas ordenes. cada orden pertenece a un usuario.
-User.hasMany(OrderPayment, {foreignKey: 'user_id'});
-// OrderPayment.belongsToMany(Template, {through: 'OrderPaymentTemplate'});
-// Template.hasMany(OrderPayment, {through: 'OrderPaymentTemplate'}); 
-// PaymentStatus.belongsTo(OrderPayment, {foreignKey: 'payment_status_id'}); // es importante primero crear: Pending & Fulfilled en en la tabla PaymentStatus.
-// PaymentStatus.hasMany(OrderPayment, {foreignKey: 'payment_status_id'}); // PaymentStatus (Pending & Fulfilled) pueden tener varias ordenes asociadas a ellas.
-// OrderPayment.belongsTo(PaymentStatus, {foreignKey: 'payment_status_id'});
-OrderPayment.belongsTo(Order, {foreignKey: 'order_id'});
-Order.belongsToMany(OrderPayment, {foreignKey: 'order_id'});
-
-// // reported template.
-// // cada report esta asociado a un usuario.
-// ReportedTemplate.belongsTo(User, {foreignKey: 'user_id'});
-// // un usuario puede realizar varios reportes.
-// ReportedTemplate.belongsTo(Template, {foreignKey: 'template_id'});
-
-// // cada reporte pertenece a un template.
-// ReportedTemplate.belongsTo(Template, {foreignKey: 'template_id'});
-
-// // un template puede contener varios reportes.
-// Template.hasMany(ReportedTemplate, {foreignKey: 'template_id'});
-
-// // relaciones admin.
-// // one-to-one
-// User.hasOne(Admin, {foreignKey: 'user_id'});
-// Admin.belongsTo(User, {foreignKey: 'user_id'})
-
-/**
- * Order.belongsTo(User, { foreignKey: 'user_id' });
-Order.belongsToMany(Template, { through: 'OrderTemplate' });
-Template.belongsToMany(Order, { through: 'OrderTemplate' });
-
- */
-
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
