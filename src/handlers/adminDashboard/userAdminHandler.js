@@ -72,6 +72,11 @@ const disableUserById = async (req, res) => {
 
         await userToBan.update({ deleted_at: new Date() });
 
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, userToBan.email, 'Cuenta desactivada', 'Tu cuenta ha sido desactivada.');
+
+
         return res.json({ userBanned: `Usuario con id: ${user_id} ha sido desactivado` });
     } catch (error) {
         return res.status(500).json(`Internal Server Error: ${error}`);
@@ -106,6 +111,10 @@ const disableUserByEmail = async (req, res) => {
 
         await user.update({ deleted_at: new Date() });
 
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, user.email, 'Cuenta desactivada', 'Tu cuenta ha sido desactivada.');
+
         return res.json({ userBanned: `Usuario con email: ${email} ha sido desactivado` });
     } catch (error) {
         return res.status(500).json({ error: `Internal Server Error: ${error}` });
@@ -134,6 +143,11 @@ const activateUserById = async (req, res) => {
 
         // un ban the user
         await user.update({deleted_at: null})
+
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, user.email, 'Cuenta activada', 'Tu cuenta ha sido activada.');
+
 
         return res.status(201).json('usuario Activado exitosamente')
         
@@ -164,6 +178,11 @@ const activateUserByEmail = async (req, res) => {
 
         await user.update({deleted_at: null});
 
+        // EMAIL
+        const transporter = await initializeTransporter();
+        await sendMail(transporter, user.email, 'Cuenta activada', 'Tu cuenta ha sido activada.');
+
+
         return res.status(201).json({ message: `Usuario con email: ${email} ha sido activado exitosamente` });
 
 
@@ -176,18 +195,33 @@ const activateUserByEmail = async (req, res) => {
 // ver todos los usuarios NO desactivados. GET
 const viewAllUsers = async (req, res) => {
     try {
-        
-        const allUsers = await User.findAll({where: {deleted_at: null}});
+        const allUsers = await User.findAll({
+            where: { deleted_at: null },
+            include: [{
+                model: Admin,
+                as: 'admin', // Ensure this alias matches your association alias
+                required: false // This makes the Admin association optional
+            }]
+        });
+
         if (allUsers.length === 0) {
-            return res.status(404).json({noUsersFound: 'No existen usuarios'})
-        };
+            return res.status(404).json({ noUsersFound: 'No existen usuarios' });
+        }
 
-        return res.json(allUsers)
+        const usersWithAdminStatus = allUsers.map(user => ({
+            ...user.toJSON(),
+            isAdmin: user.admin !== null // Check if `admin` association exists
+        }));
 
+        return res.json(usersWithAdminStatus);
     } catch (error) {
-        return res.status(500).json({ error: `Internal Server Error: ${error}` });
+        return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
     }
 };
+
+
+
+
 
 // ver todos los usuarios desactivados. GEY
 const viewAllDisabledUsers = async (req, res) => {

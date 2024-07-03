@@ -103,6 +103,11 @@ Template.belongsToMany(Cart, { through: 'CartTemplates', as: "toCart" });
 Order.belongsToMany(Template, { through: 'OrderTemplates', as: 'purchasedTemplates' });
 Template.belongsToMany(Order, { through: 'OrderTemplates', as: 'orders' });
 
+// Relacion admin y user. (one-to-one).
+User.hasOne(Admin, { foreignKey: 'user_id', as: 'admin' });
+Admin.belongsTo(User, { foreignKey: 'user_id' });
+
+
 /*User.belongsToMany(Review,  {foreignKey: 'user_id'}, {through: 'userReview'}
 
 );

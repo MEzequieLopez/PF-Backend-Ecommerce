@@ -1,3 +1,50 @@
+/*
+const nodemailer = require('nodemailer');
+
+
+const nodemailerOptions = {
+    service: 'gmail',
+    auth: {
+        user: 'oliver125125@gmail.com',
+        pass: 'aiyp fvhl djxd rjny', 
+    }
+};
+
+async function initializeTransporter() {
+    const testAccount = await nodemailer.createTestAccount();
+
+    nodemailerOptions.auth.user = nodemailerOptions.auth.user;
+    nodemailerOptions.auth.pass = nodemailerOptions.auth.pass;
+
+    const transporter = nodemailer.createTransport(nodemailerOptions);
+
+    return transporter;
+}
+
+async function sendMail(transporter, to, subject, message) {
+    try {
+        const info = await transporter.sendMail({
+            from: nodemailerOptions.auth.user,
+            to: to,
+            subject: subject,
+            text: message,
+            html: `<p>${message}</p>`
+        });
+        console.log(`Message sent: ${info.messageId}`);
+        console.log(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+    } catch (error) {
+        console.error(`Error sending email to ${to}: ${error}`);
+        throw error;
+    }
+}
+
+module.exports = {
+    initializeTransporter,
+    sendMail
+};
+*/
+
+
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -23,3 +70,4 @@ const sendMail = async (email) => {
     console.log("Message sent: %s", mail);
 }
 module.exports = sendMail;
+
