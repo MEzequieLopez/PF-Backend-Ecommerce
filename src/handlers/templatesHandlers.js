@@ -4,6 +4,7 @@ const {
   getAllTechnologies,
   getAllCategories,
 } = require("../services/templatesServices");
+
 const data = require("../../Data.json");
 const { Category, Technology, Template, Image } = require("../db");
 const { CreateTemplates } = require("../services/adminTemplatesServices");
@@ -23,7 +24,7 @@ const postTemplates = async (req, res) => {
         isCover,
         image,
         technology,
-        category,
+        category
       );
       return res.status(200).json(newTemplate);
     }
