@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
       allowNull: true,
       defaultValue: null // <-- utilizando paranoid: true No habria filtrar manualmente en las rutas.
     },
+    technology:{
+      type: DataTypes.STRING,
+      allowNull: true,  
+    }
 
   },
   {

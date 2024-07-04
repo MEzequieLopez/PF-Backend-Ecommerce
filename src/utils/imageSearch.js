@@ -19,6 +19,7 @@ async function buscarImagensEnCarpetas(categoria) {
       .max_results(options.maxResults)
       .sort_by('created_at')
       .execute();
+      console.log(response);
       response.resources.forEach(resource => {
 
         const isCover = options.folder.includes("_Portada"); // true si es una portada, false si es detalle

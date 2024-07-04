@@ -5,9 +5,12 @@ const { buscarImagensEnCarpetas } = require("../utils/imageSearch");
 const guardaImagenes = async (template, templateData) => {
   try {
     const categoryName = templateData.categories[0];
-    
+    const technologyName = templateData.technologies[0];
+    const technology = await Technology.findOne({ where: { name: technologyName } });
     const category = await Category.findOne({ where: { name: categoryName } });
-
+    if(!technology){
+      console.log("no se encuentra la technology en la DB");
+    }
     if (!category) {
       console.warn(`Category not found for name: ${categoryName}`);
       return;
@@ -28,6 +31,7 @@ const guardaImagenes = async (template, templateData) => {
       }
       const existingImage = await Image.findOne({ where: { set: index } });
       if (existingImage) {
+        await technology.addImage(existingImage);
         await category.addImage(existingImage);
         await template.addImage(existingImage);
       } else {
@@ -37,6 +41,7 @@ const guardaImagenes = async (template, templateData) => {
           isCover: allImagene[i].isCover,
           category: allImagene[i].category,
         });
+        await technology.addImage(newImage);
         await category.addImage(newImage);
         await template.addImage(newImage);
       }

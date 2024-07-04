@@ -1,15 +1,17 @@
 
+const { Op } = require("sequelize");
 const { Category, Technology, Template, Review, Image } = require("../db");
 const CreateTemplates = async (
     name,
     description,
     price,
     isCover,
-    imagen,
+    image,
     technology,
     category
   ) => {
     try {
+      console.log(name);
       const newTemplate = await Template.create({
         name,
         description,
@@ -26,7 +28,7 @@ const CreateTemplates = async (
         await newTemplate.addImage(newImageC);
       }
           
-      for (let urlD of imagen) {
+      for (let urlD of image) {
         const newImagesD = await Image.create({
           original: urlD,
           isCover: false,

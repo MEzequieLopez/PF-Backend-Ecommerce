@@ -12,12 +12,12 @@ const sequelize = new Sequelize({
   host: `${DB_HOST}`,
   dialect: "postgres",
   protocol: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  },
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false
+  //   }
+  // },
   logging: false,
 });
 
@@ -54,6 +54,8 @@ const { Template, Category, Technology, User, Image, Review, Cart, Order,
 // Template.belongsTo(Category);
 Template.belongsToMany(Image, { through: "TemplateImages" });
 Image.belongsToMany(Template, { through: "TemplateImages" });
+Technology.belongsToMany(Image, { through: "TechnologyImages" });
+Image.belongsToMany(Technology, { through: "TechnologyImages" });
 
 Category.belongsToMany(Image, { through: 'CategoriImages' });
 Image.belongsToMany(Category, { through: 'CategoriImages' });
@@ -74,8 +76,6 @@ User.belongsToMany(Template, { through: 'userFavorites', as: "Favorites" });
 Template.belongsToMany(Technology, { through: 'TemplateTechnologies' });
 Technology.belongsToMany(Template, { through: 'TemplateTechnologies' });
 // relacion entre Image y Template (many-to-many)
-Template.belongsToMany(Image, { through: 'templateImages' });
-Image.belongsToMany(Template, { through: 'templateImages' });
 
 Template.hasMany(Review, {
   //foreignKey: 'templateId',
