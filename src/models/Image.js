@@ -19,11 +19,11 @@ module.exports = (sequelize) => {
     },
     set: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     category: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     }
 },
 {
